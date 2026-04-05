@@ -40,6 +40,12 @@ const KNOWN_WETH9: Record<number, string> = {
   84532:    "0x4200000000000000000000000000000000000006", // Base Sepolia
   42161:    "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1", // Arbitrum
   10143:    "0x0000000000000000000000000000000000000000", // Monad testnet (deploy fresh)
+  4217:     "0x0000000000000000000000000000000000000000", // Tempo (deploy fresh WUSD9)
+};
+
+/** Native currency label for NonfungibleTokenPositionDescriptor, by chainId */
+const NATIVE_CURRENCY_LABEL: Record<number, string> = {
+  4217: "USD", // Tempo native currency
 };
 
 /**
@@ -161,7 +167,7 @@ async function main() {
     "contracts/libraries/NFTDescriptor.sol:NFTDescriptor": nftDescAddr,
   });
   const nftPosDescFactory  = new ethers.ContractFactory(nftPosDescArtifact.abi, linkedBytecode, deployer);
-  const nativeCurrencyLabelBytes = ethers.encodeBytes32String("ETH");
+  const nativeCurrencyLabelBytes = ethers.encodeBytes32String(NATIVE_CURRENCY_LABEL[chainId] ?? "ETH");
   const nftPosDesc         = await nftPosDescFactory.deploy(weth9Address, nativeCurrencyLabelBytes);
   await nftPosDesc.waitForDeployment();
   const nftPosDescAddr     = await nftPosDesc.getAddress();

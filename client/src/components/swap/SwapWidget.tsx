@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowDownUp, CheckCircle2, ExternalLink, Zap, Info } from "lucide-react";
 import { useAccount, useBalance, useReadContract } from "wagmi";
+import { usePrivy } from "@privy-io/react-auth";
 import { formatUnits } from "viem";
 import { ERC20_ABI } from "../../lib/contracts";
 import { useSwap } from "../../hooks/useSwap";
@@ -23,6 +24,7 @@ const VERSION_INFO: Record<SwapVersion, { color: string; text: string }> = {
 
 export default function SwapWidget() {
   const { isConnected, address } = useAccount();
+  const { login } = usePrivy();
   const [version, setVersion] = useState<SwapVersion>("v3");
   const [selectorTarget, setSelectorTarget] = useState<SelectorTarget>(null);
   const [hookAddr, setHookAddr] = useState<string>(V4_HOOKS[0].address);
@@ -201,7 +203,19 @@ export default function SwapWidget() {
 
       {/* CTA */}
       {!isConnected ? (
-        <div style={{ marginTop: "0.65rem" }}><appkit-button /></div>
+        <button
+          onClick={() => login()}
+          style={{
+            marginTop: "0.65rem", width: "100%", padding: "0.75rem",
+            background: "var(--accent)", color: "var(--bg-deep)",
+            border: "none", cursor: "pointer",
+            fontSize: 13, fontWeight: 900, letterSpacing: "0.12em",
+            fontFamily: "'Share Tech Mono', monospace",
+            boxShadow: "0 0 20px var(--accent-glow)",
+          }}
+        >
+          CONNECT WALLET
+        </button>
       ) : needsApproval ? (
         <CTA onClick={approve} label={`APPROVE ${tokenIn?.symbol}`} />
       ) : (

@@ -11,6 +11,8 @@
     "deploy:dex:sepolia": "hardhat run scripts/deploy-dex.ts --network sepolia",
     "deploy:dex:base":    "hardhat run scripts/deploy-dex.ts --network base",
     "deploy:dex:local":   "hardhat run scripts/deploy-dex.ts --network localhost",
+    "deploy:dex:tempo":   "hardhat run scripts/deploy-dex.ts --network tempo",
+    "verify:dex:tempo":   "hardhat run scripts/verify-dex.ts --network tempo",
     "deploy:base": "hardhat run scripts/deploy.ts --network base",
     "deploy:mainnet": "hardhat run scripts/deploy.ts --network mainnet",
     "deploy:monad": "hardhat run scripts/deploy.ts --network monad",

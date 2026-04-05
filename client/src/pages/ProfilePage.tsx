@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAccount, useBalance, useChainId, useEnsName, useReadContracts } from "wagmi";
-import { useAppKit } from "@reown/appkit/react";
+import { usePrivy } from "@privy-io/react-auth";
 import {
   Copy, Check, ExternalLink, TrendingUp,
   Wallet, Activity, ArrowUpRight, ArrowDownLeft, RefreshCw,
@@ -171,7 +171,7 @@ export default function ProfilePage() {
   const chainId = useChainId();
   const { data: balance } = useBalance({ address });
   const { data: ensName } = useEnsName({ address, chainId: 1 });
-  const { open } = useAppKit();
+  const { login } = usePrivy();
   const perps = usePerps();
   const [copied, setCopied] = useState(false);
   const [tab, setTab] = useState<Tab>("Portfolio");
@@ -237,7 +237,7 @@ export default function ProfilePage() {
         <div style={{ fontWeight: 900, fontSize: 20, letterSpacing: "0.1em", fontFamily: "'Rajdhani', sans-serif", marginBottom: "0.5rem" }}>NO WALLET CONNECTED</div>
         <div style={{ color: "var(--text-muted)", fontSize: 12, fontFamily: "'Share Tech Mono', monospace", marginBottom: "1.5rem" }}>Connect your wallet to view your profile and portfolio</div>
         <button
-          onClick={() => open()}
+          onClick={() => login()}
           style={{
             padding: "0.75rem 2rem", border: "1px solid var(--accent)",
             background: "var(--accent)", color: "var(--bg-deep)",

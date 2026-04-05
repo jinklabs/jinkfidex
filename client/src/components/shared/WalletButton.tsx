@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount, useBalance, useDisconnect, useChainId } from "wagmi";
-import { useAppKit } from "@reown/appkit/react";
+import { usePrivy } from "@privy-io/react-auth";
 import { Copy, ExternalLink, LogOut, Check, ChevronDown, Wallet, User } from "lucide-react";
 
 const CHAIN_META: Record<number, { name: string; color: string }> = {
@@ -27,7 +27,7 @@ export default function WalletButton() {
   const { address, isConnected, connector } = useAccount();
   const { disconnect } = useDisconnect();
   const chainId = useChainId();
-  const { open } = useAppKit();
+  const { login } = usePrivy();
   const navigate = useNavigate();
   const { data: balance } = useBalance({ address });
   const [dropOpen, setDropOpen] = useState(false);
@@ -57,7 +57,7 @@ export default function WalletButton() {
   if (!isConnected) {
     return (
       <button
-        onClick={() => open()}
+        onClick={() => login()}
         style={{
           display: "flex", alignItems: "center", gap: "0.45rem",
           padding: "0.35rem 0.9rem",
@@ -231,23 +231,6 @@ export default function WalletButton() {
               onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-muted)"; }}
             >
               <User size={11} /> VIEW PROFILE
-            </button>
-            <button
-              onClick={() => { open(); setDropOpen(false); }}
-              style={{
-                width: "100%", padding: "0.5rem 0.75rem",
-                background: "transparent", border: "1px solid var(--border)",
-                color: "var(--text-muted)", cursor: "pointer",
-                fontSize: 11, fontWeight: 700, letterSpacing: "0.08em",
-                fontFamily: "'Share Tech Mono', monospace",
-                marginBottom: "0.35rem",
-                transition: "all 0.12s",
-                textAlign: "left",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.color = "var(--accent)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-muted)"; }}
-            >
-              MANAGE WALLET
             </button>
             <button
               onClick={() => { disconnect(); setDropOpen(false); }}

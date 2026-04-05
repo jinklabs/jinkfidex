@@ -13,11 +13,12 @@ const CHAIN_META: Record<number, { name: string; short: string; color: string; t
   999:      { name: "HyperEVM",      short: "HYPE",  color: "#00ff94" },
   361:      { name: "Plasma",        short: "PLSM",  color: "#7C3AED" },
   4217:     { name: "Tempo",         short: "TEMPO", color: "#0EA5E9" },
+  42431:    { name: "Tempo Moderato",short: "TEMPO", color: "#0EA5E9", testnet: true },
   11155111: { name: "Sepolia",       short: "SEP",   color: "#627EEA", testnet: true },
   6342:     { name: "MegaETH",       short: "MEGA",  color: "#FF6B35" },
 };
 
-const CHAIN_ORDER = [1, 8453, 42161, 137, 10, 56, 999, 6342, 10143, 361, 4217, 11155111];
+const CHAIN_ORDER = [4217, 11155111];
 
 export default function ChainSwitcher() {
   const { isConnected } = useAccount();

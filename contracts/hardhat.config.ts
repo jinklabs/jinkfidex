@@ -55,6 +55,13 @@ const config: HardhatUserConfig = {
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
     },
 
+    // ── Tempo Mainnet ─────────────────────────────────────────────────────────
+    tempo: {
+      url:      process.env.TEMPO_RPC_URL ?? "https://rpc.tempo.xyz",
+      chainId:  4217,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+    },
+
     // ── HyperEVM ──────────────────────────────────────────────────────────────
     hyperevm: {
       url:      process.env.HYPEREVM_RPC_URL ?? "https://api.hyperliquid.xyz/evm",
@@ -111,6 +118,14 @@ const config: HardhatUserConfig = {
         urls: {
           apiURL:     "https://explorer.hyperliquid.xyz/api",
           browserURL: "https://explorer.hyperliquid.xyz",
+        },
+      },
+      {
+        network:    "tempo",
+        chainId:    4217,
+        urls: {
+          apiURL:     "https://explore.mainnet.tempo.xyz/api",
+          browserURL: "https://explore.mainnet.tempo.xyz",
         },
       },
     ],

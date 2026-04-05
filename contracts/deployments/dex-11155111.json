@@ -2,7 +2,7 @@
   "network": "sepolia",
   "chainId": "11155111",
   "timestamp": "2026-03-27T08:05:24.055Z",
-  "deployer": "0x4BC0eCb18991D3eD1ca3B31D453d9C0C9301D24F",
+  "deployer": "0xf7a5a11c99aafc17a066d97b38cb87daec086fba",
   "contracts": {
     "weth9": "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14",
     "v2Factory": "0x4Ad76DCe86BecEBC48Aba2f4dD0F685D6C3B7430",

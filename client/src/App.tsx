@@ -1,5 +1,11 @@
-import { useState } from "react";
-import { Routes, Route, Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Routes, Route, Outlet, useLocation } from "react-router-dom";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
 import Navbar from "./components/shared/Navbar";
 import Sidebar from "./components/shared/Sidebar";
 import BottomNav from "./components/shared/BottomNav";
@@ -97,6 +103,7 @@ export default function App() {
   return (
     <UIProvider>
     <PriceFeedProvider>
+      <ScrollToTop />
       <Routes>
         {/* Standalone landing — no sidebar or navbar */}
         <Route path="/" element={<PageErrorBoundary><LandingPage /></PageErrorBoundary>} />

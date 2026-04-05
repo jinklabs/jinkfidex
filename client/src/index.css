@@ -4,43 +4,43 @@
 @import "tailwindcss";
 
 :root {
-  /* ── Sunny & Calm — dark mode ──────────────────
-     Palette: Cerulean #00303F · Honey #D4AF37
-              Morning Sky #CAE4DB · Mist #7A9D9E
+  /* ── Midnight Modern ───────────────────────────
+     Palette: Void #080a12 · Violet #7c5cfc
+              Lavender #c4b5fd · Cyan #06b6d4
   ─────────────────────────────────────────────── */
 
-  /* Backgrounds — deep cerulean teal */
-  --bg-deep:      #001e29;
-  --bg-card:      #002d3d;
-  --bg-card2:     #003a4e;
-  --bg-input:     #001520;
+  /* Backgrounds — near-black with cool undertone */
+  --bg-deep:      #080a12;
+  --bg-card:      #0d1117;
+  --bg-card2:     #111827;
+  --bg-input:     #060810;
 
-  /* Primary accent — Honey gold */
-  --accent:       #d4af37;
-  --accent-glow:  rgba(212,175,55,0.35);
-  --accent-hover: #e8c240;
+  /* Primary accent — electric violet */
+  --accent:       #7c5cfc;
+  --accent-glow:  rgba(124,92,252,0.35);
+  --accent-hover: #9575ff;
 
-  /* Neon — Morning Sky */
-  --neon:         #cae4db;
-  --neon-dim:     rgba(202,228,219,0.12);
-  --neon-glow:    rgba(202,228,219,0.25);
+  /* Neon — soft lavender */
+  --neon:         #c4b5fd;
+  --neon-dim:     rgba(196,181,253,0.10);
+  --neon-glow:    rgba(196,181,253,0.22);
 
-  /* Secondary — Mist */
-  --punk:         #7a9d9e;
-  --punk-glow:    rgba(122,157,158,0.45);
-  --punk-dim:     rgba(122,157,158,0.15);
+  /* Secondary — cyan */
+  --punk:         #06b6d4;
+  --punk-glow:    rgba(6,182,212,0.35);
+  --punk-dim:     rgba(6,182,212,0.10);
 
   /* Borders */
-  --border:       #0f4a5e;
-  --border-bright: rgba(212,175,55,0.3);
-  --border-glow:  rgba(212,175,55,0.5);
+  --border:       #1e2535;
+  --border-bright: rgba(124,92,252,0.30);
+  --border-glow:  rgba(124,92,252,0.55);
 
   /* Text */
-  --text:         #cae4db;
-  --text-muted:   #7a9d9e;
+  --text:         #e2e8f0;
+  --text-muted:   #64748b;
 
   /* Misc */
-  --muted:        #0a3545;
+  --muted:        #0a0d18;
 
   /* Radius — sharp style */
   --r-xs: 2px;
@@ -49,40 +49,40 @@
   --r-lg: 8px;
 }
 
-/* ── Light theme — Sunny & Calm ───────────────── */
+/* ── Light theme — Midnight Modern (light) ────── */
 [data-theme="light"] {
-  /* Backgrounds — warm cream */
-  --bg-deep:      #f5f5f0;
+  /* Backgrounds — clean off-white */
+  --bg-deep:      #f8f8fc;
   --bg-card:      #ffffff;
-  --bg-card2:     #eef5f2;
-  --bg-input:     #e4eeea;
+  --bg-card2:     #f1f0ff;
+  --bg-input:     #eeecff;
 
-  /* Accent — Honey gold (same) */
-  --accent:       #c09b25;
-  --accent-glow:  rgba(192,155,37,0.25);
-  --accent-hover: #d4af37;
+  /* Accent — violet (slightly darkened for light bg) */
+  --accent:       #6d48f5;
+  --accent-glow:  rgba(109,72,245,0.20);
+  --accent-hover: #7c5cfc;
 
-  /* Neon — Morning Sky toned for light */
-  --neon:         #4a9080;
-  --neon-dim:     rgba(74,144,128,0.1);
-  --neon-glow:    rgba(74,144,128,0.2);
+  /* Neon — deep lavender */
+  --neon:         #7c3aed;
+  --neon-dim:     rgba(124,58,237,0.08);
+  --neon-glow:    rgba(124,58,237,0.18);
 
-  /* Secondary — Mist */
-  --punk:         #4a7a7b;
-  --punk-glow:    rgba(74,122,123,0.3);
-  --punk-dim:     rgba(74,122,123,0.1);
+  /* Secondary — cyan */
+  --punk:         #0891b2;
+  --punk-glow:    rgba(8,145,178,0.25);
+  --punk-dim:     rgba(8,145,178,0.08);
 
-  /* Borders — Morning Sky */
-  --border:       #b8d8ce;
-  --border-bright: rgba(192,155,37,0.25);
-  --border-glow:  rgba(192,155,37,0.4);
+  /* Borders */
+  --border:       #ddd8ff;
+  --border-bright: rgba(109,72,245,0.25);
+  --border-glow:  rgba(109,72,245,0.4);
 
-  /* Text — Cerulean */
-  --text:         #00303f;
-  --text-muted:   #5a8a8b;
+  /* Text */
+  --text:         #0f0a1e;
+  --text-muted:   #6b7280;
 
   /* Misc */
-  --muted:        #d4e8e2;
+  --muted:        #ece9ff;
 }
 
 [data-theme="light"] html,
@@ -159,9 +159,9 @@ input[type="number"] { -moz-appearance: textfield; }
 }
 @keyframes glitch {
   0%,85%,100% { clip-path: none; transform: none; color: var(--accent); }
-  87% { clip-path: polygon(0 10%, 100% 10%, 100% 30%, 0 30%); transform: translate(-4px,0); color: #d4af37; }
+  87% { clip-path: polygon(0 10%, 100% 10%, 100% 30%, 0 30%); transform: translate(-4px,0); color: var(--punk); }
   89% { clip-path: polygon(0 55%, 100% 55%, 100% 75%, 0 75%); transform: translate(4px,0);  color: var(--accent); }
-  91% { clip-path: polygon(0 25%, 100% 25%, 100% 40%, 0 40%); transform: translate(-2px,0); color: #e8c240; }
+  91% { clip-path: polygon(0 25%, 100% 25%, 100% 40%, 0 40%); transform: translate(-2px,0); color: var(--neon); }
   93% { clip-path: none; transform: none; }
 }
 @keyframes borderPulse {

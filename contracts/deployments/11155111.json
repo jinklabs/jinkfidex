@@ -2,8 +2,8 @@
   "network": "sepolia",
   "chainId": "11155111",
   "timestamp": "2026-03-27T08:09:11.763Z",
-  "deployer": "0x4BC0eCb18991D3eD1ca3B31D453d9C0C9301D24F",
-  "feeRecipient": "0x4BC0eCb18991D3eD1ca3B31D453d9C0C9301D24F",
+  "deployer": "0xf7a5a11c99aafc17a066d97b38cb87daec086fba",
+  "feeRecipient": "0xf7a5a11c99aafc17a066d97b38cb87daec086fba",
   "contracts": {
     "rewardToken": "0xa8fFDf42BbF8C87F4A71d48d3A7C96eF86ee0163",
     "lockerManager": "0x9EE61392636ab192537DE1D6541056bc2aDFCF8F",
