@@ -7,7 +7,8 @@ import type { FarmInfo } from "../lib/farms";
 export function useFarm(farm: FarmInfo) {
   const { address } = useAccount();
   const chainId = useChainId();
-  const addrs = CONTRACT_ADDRESSES[chainId] ?? CONTRACT_ADDRESSES[1];
+  const addrs = CONTRACT_ADDRESSES[chainId];
+  const farmAddress = addrs?.farm;
   const { writeContractAsync } = useWriteContract();
 
   const [stakeAmount, setStakeAmount] = useState("");
@@ -15,19 +16,19 @@ export function useFarm(farm: FarmInfo) {
   const [error, setError] = useState<string | null>(null);
 
   const { data: userInfo, refetch: refetchUser } = useReadContract({
-    address: addrs.farm,
+    address: farmAddress,
     abi: FARM_ABI,
     functionName: "userInfo",
     args: address ? [BigInt(farm.pid), address] : undefined,
-    query: { enabled: !!address, refetchInterval: 10_000 },
+    query: { enabled: !!address && !!farmAddress, refetchInterval: 10_000 },
   });
 
   const { data: pending, refetch: refetchPending } = useReadContract({
-    address: addrs.farm,
+    address: farmAddress,
     abi: FARM_ABI,
     functionName: "pendingReward",
     args: address ? [BigInt(farm.pid), address] : undefined,
-    query: { enabled: !!address, refetchInterval: 10_000 },
+    query: { enabled: !!address && !!farmAddress, refetchInterval: 10_000 },
   });
 
   const { data: lpBalance } = useReadContract({
@@ -42,24 +43,25 @@ export function useFarm(farm: FarmInfo) {
     address: farm.lpToken as `0x${string}`,
     abi: ERC20_ABI,
     functionName: "allowance",
-    args: address ? [address, addrs.farm] : undefined,
-    query: { enabled: !!address },
+    args: address && farmAddress ? [address, farmAddress] : undefined,
+    query: { enabled: !!address && !!farmAddress },
   });
 
   const parsedStake = stakeAmount ? (() => { try { return parseUnits(stakeAmount, 18); } catch { return 0n; } })() : 0n;
   const needsApprove = !!allowance && parsedStake > 0n && (allowance as bigint) < parsedStake;
 
   const approve = useCallback(async () => {
-    await writeContractAsync({ address: farm.lpToken as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [addrs.farm, maxUint256] });
+    if (!farmAddress) return;
+    await writeContractAsync({ address: farm.lpToken as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [farmAddress, maxUint256] });
     refetchAllowance();
-  }, [farm.lpToken, addrs.farm, writeContractAsync, refetchAllowance]);
+  }, [farm.lpToken, farmAddress, writeContractAsync, refetchAllowance]);
 
   const stake = useCallback(async () => {
-    if (!parsedStake) return;
+    if (!parsedStake || !farmAddress) return;
     setIsPending(true);
     setError(null);
     try {
-      await writeContractAsync({ address: addrs.farm, abi: FARM_ABI, functionName: "deposit", args: [BigInt(farm.pid), parsedStake] });
+      await writeContractAsync({ address: farmAddress, abi: FARM_ABI, functionName: "deposit", args: [BigInt(farm.pid), parsedStake] });
       setStakeAmount("");
       refetchUser();
     } catch (e: unknown) {
@@ -67,33 +69,35 @@ export function useFarm(farm: FarmInfo) {
     } finally {
       setIsPending(false);
     }
-  }, [farm.pid, parsedStake, addrs.farm, writeContractAsync, refetchUser]);
+  }, [farm.pid, parsedStake, farmAddress, writeContractAsync, refetchUser]);
 
   const unstake = useCallback(async (amount: bigint) => {
+    if (!farmAddress) return;
     setIsPending(true);
     setError(null);
     try {
-      await writeContractAsync({ address: addrs.farm, abi: FARM_ABI, functionName: "withdraw", args: [BigInt(farm.pid), amount] });
+      await writeContractAsync({ address: farmAddress, abi: FARM_ABI, functionName: "withdraw", args: [BigInt(farm.pid), amount] });
       refetchUser();
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Unstake failed");
     } finally {
       setIsPending(false);
     }
-  }, [farm.pid, addrs.farm, writeContractAsync, refetchUser]);
+  }, [farm.pid, farmAddress, writeContractAsync, refetchUser]);
 
   const harvest = useCallback(async () => {
+    if (!farmAddress) return;
     setIsPending(true);
     setError(null);
     try {
-      await writeContractAsync({ address: addrs.farm, abi: FARM_ABI, functionName: "harvest", args: [BigInt(farm.pid)] });
+      await writeContractAsync({ address: farmAddress, abi: FARM_ABI, functionName: "harvest", args: [BigInt(farm.pid)] });
       refetchPending();
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Harvest failed");
     } finally {
       setIsPending(false);
     }
-  }, [farm.pid, addrs.farm, writeContractAsync, refetchPending]);
+  }, [farm.pid, farmAddress, writeContractAsync, refetchPending]);
 
   const stakedAmount = userInfo ? (userInfo as readonly [bigint, bigint])[0] : 0n;
 

@@ -180,7 +180,7 @@ export default function ProfilePage() {
   // Live prices
   const allSymbols = ["ETH", ...erc20Holdings.map((h) => h.token.symbol)];
   const prices = usePrices(allSymbols);
-  const liveEthPrice = prices["ETH"] ?? 3542.80;
+  const liveEthPrice = prices["ETH"] ?? 0;
   const liveEthValue = ethBal * liveEthPrice;
   const erc20Value = erc20Holdings.reduce(
     (sum, { token, balance: bal }) => sum + bal * (prices[token.symbol] ?? 0),
@@ -308,7 +308,6 @@ export default function ProfilePage() {
       </div>
 
       {/* ── Stat cards ──────────────────────────────────────────────────── */}
-      {/* Removed: stat cards with hardcoded values. Will re-add when live data API available. */}
 
       {/* ── Tabs ────────────────────────────────────────────────────────── */}
       <div style={{ background: "var(--bg-card)", border: "1px solid var(--border)", overflow: "hidden" }}>

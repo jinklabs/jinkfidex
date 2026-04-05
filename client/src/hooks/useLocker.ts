@@ -62,7 +62,7 @@ export function useLocker() {
   const { address } = useAccount();
 
   const managerAddress = CONTRACT_ADDRESSES[chainId]?.lockerManager as `0x${string}` | undefined;
-  const enabled = !!managerAddress && managerAddress !== "0x0000000000000000000000000000000000000001";
+  const enabled = !!managerAddress;
 
   // ── Fees ──────────────────────────────────────────────────────────────────
 

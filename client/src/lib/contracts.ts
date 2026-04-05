@@ -273,8 +273,8 @@ export const FARM_ABI = [
 export const CONTRACT_ADDRESSES: Record<number, {
   router: `0x${string}`;
   factory: `0x${string}`;
-  lockerManager: `0x${string}`;
-  farm: `0x${string}`;
+  lockerManager?: `0x${string}`;
+  farm?: `0x${string}`;
   v3Factory?: `0x${string}`;
   nonfungiblePositionManager?: `0x${string}`;
   v3SwapRouter?: `0x${string}`;
@@ -285,8 +285,6 @@ export const CONTRACT_ADDRESSES: Record<number, {
   1: { // Ethereum Mainnet
     router:        "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
     factory:       "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
-    lockerManager: "0x0000000000000000000000000000000000000001",
-    farm:          "0x0000000000000000000000000000000000000002",
     v3Factory:     "0x1F98431c8aD98523631AE4a59f267346ea31F984",
     nonfungiblePositionManager: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
     v3SwapRouter:  "0xE592427A0AEce92De3Edee1F18E0157C05861564",
@@ -307,8 +305,6 @@ export const CONTRACT_ADDRESSES: Record<number, {
   8453: { // Base
     router:        "0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24",
     factory:       "0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6",
-    lockerManager: "0x0000000000000000000000000000000000000001",
-    farm:          "0x0000000000000000000000000000000000000002",
     v3Factory:     "0x33128a8fC17869897dcE68Ed026d694621f6FDfD",
     nonfungiblePositionManager: "0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1",
     v3SwapRouter:  "0x2626664c2603336E57B271c5C0b26F421741e481",

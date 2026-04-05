@@ -205,14 +205,9 @@ export const UNISWAP_ADDRESSES: Record<number, {
   },
 };
 
-// ── V4 Hooks (popular community hooks) ───────────────────────────────────────
+// ── V4 Hooks ──────────────────────────────────────────────────────────────────
 export const V4_HOOKS = [
-  { name: "No Hook",          address: "0x0000000000000000000000000000000000000000", description: "Standard pool, no custom logic" },
-  { name: "TWAMM",            address: "0x0000000000000000000000000000000000000001", description: "Time-weighted average market maker" },
-  { name: "Dynamic Fee",      address: "0x0000000000000000000000000000000000000002", description: "Fee adjusts based on volatility" },
-  { name: "Limit Orders",     address: "0x0000000000000000000000000000000000000003", description: "On-chain limit orders via hooks" },
-  { name: "Geomean Oracle",   address: "0x0000000000000000000000000000000000000004", description: "Built-in TWAP oracle" },
-  { name: "Full Range",       address: "0x0000000000000000000000000000000000000005", description: "Provides liquidity across full range" },
+  { name: "No Hook", address: "0x0000000000000000000000000000000000000000", description: "Standard pool, no custom logic" },
 ] as const;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

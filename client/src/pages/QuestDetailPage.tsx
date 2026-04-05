@@ -4,12 +4,11 @@ import { useQuest, useLeaderboard, useQuestProgress, useVerifyTask } from "../ho
 import TaskItem from "../components/quest/TaskItem";
 import Leaderboard from "../components/quest/Leaderboard";
 import { useAccount } from "wagmi";
-import { MOCK_QUESTS } from "../lib/mockQuests";
 
 export default function QuestDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { data: serverQuest, isLoading, error } = useQuest(id!);
-  const quest = serverQuest ?? (error ? MOCK_QUESTS.find(q => q.id === id) : undefined);
+  const { data: serverQuest, isLoading } = useQuest(id!);
+  const quest = serverQuest;
   const { data: leaderboard } = useLeaderboard(id!);
   const { data: progress } = useQuestProgress(id!);
   const { verifying, results, verify } = useVerifyTask(id!);

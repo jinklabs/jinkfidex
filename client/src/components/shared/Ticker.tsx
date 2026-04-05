@@ -1,16 +1,16 @@
 import { useFeed } from "../../context/PriceFeedContext";
 
-const STATIC = [
-  { symbol: "BTC",   feedKey: "BTCUSDT",   fallbackPrice: "67,412.50", fallbackChange: "+2.4%" },
-  { symbol: "ETH",   feedKey: "ETHUSDT",   fallbackPrice: "3,542.80",  fallbackChange: "+1.8%" },
-  { symbol: "BNB",   feedKey: "BNBUSDT",   fallbackPrice: "592.30",    fallbackChange: "-0.5%" },
-  { symbol: "SOL",   feedKey: "SOLUSDT",   fallbackPrice: "181.42",    fallbackChange: "+4.2%" },
-  { symbol: "ARB",   feedKey: "ARBUSDT",   fallbackPrice: "1.24",      fallbackChange: "+3.1%" },
-  { symbol: "MATIC", feedKey: "MATICUSDT", fallbackPrice: "0.892",     fallbackChange: "-1.2%" },
-  { symbol: "LINK",  feedKey: "LINKUSDT",  fallbackPrice: "18.74",     fallbackChange: "+2.9%" },
-  { symbol: "UNI",   feedKey: "UNIUSDT",   fallbackPrice: "11.52",     fallbackChange: "+0.7%" },
-  { symbol: "AAVE",  feedKey: "AAVEUSDT",  fallbackPrice: "142.80",    fallbackChange: "+1.5%" },
-  { symbol: "CRV",   feedKey: "CRVUSDT",   fallbackPrice: "0.548",     fallbackChange: "-0.8%" },
+const SYMBOLS = [
+  { symbol: "BTC",   feedKey: "BTCUSDT"   },
+  { symbol: "ETH",   feedKey: "ETHUSDT"   },
+  { symbol: "BNB",   feedKey: "BNBUSDT"   },
+  { symbol: "SOL",   feedKey: "SOLUSDT"   },
+  { symbol: "ARB",   feedKey: "ARBUSDT"   },
+  { symbol: "MATIC", feedKey: "MATICUSDT" },
+  { symbol: "LINK",  feedKey: "LINKUSDT"  },
+  { symbol: "UNI",   feedKey: "UNIUSDT"   },
+  { symbol: "AAVE",  feedKey: "AAVEUSDT"  },
+  { symbol: "CRV",   feedKey: "CRVUSDT"   },
 ];
 
 function fmt(price: number, symbol: string): string {
@@ -21,9 +21,9 @@ function fmt(price: number, symbol: string): string {
 export default function Ticker() {
   const feed = useFeed();
 
-  const tickers = STATIC.map(t => {
+  const tickers = SYMBOLS.map(t => {
     const live = feed[t.feedKey];
-    if (!live) return { symbol: t.symbol, price: t.fallbackPrice, change: t.fallbackChange, positive: t.fallbackChange.startsWith("+") };
+    if (!live) return { symbol: t.symbol, price: "—", change: "—", positive: true };
     const pct = live.changePct24h;
     return { symbol: t.symbol, price: fmt(live.price, t.symbol), change: `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`, positive: pct >= 0 };
   });
@@ -62,10 +62,10 @@ export default function Ticker() {
             <span style={{
               fontSize: 11, color: "var(--text)",
               fontFamily: "'Share Tech Mono', monospace",
-            }}>${t.price}</span>
+            }}>{t.price === "—" ? "—" : `$${t.price}`}</span>
             <span style={{
               fontSize: 10, fontWeight: 700,
-              color: t.positive ? "var(--accent)" : "var(--punk)",
+              color: t.change === "—" ? "var(--text-muted)" : t.positive ? "var(--accent)" : "var(--punk)",
               fontFamily: "'Share Tech Mono', monospace",
             }}>{t.change}</span>
             <span style={{ color: "var(--border)", fontSize: 8 }}>·</span>

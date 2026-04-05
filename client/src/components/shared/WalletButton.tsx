@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount, useBalance, useDisconnect, useChainId } from "wagmi";
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useWallets, useLogout } from "@privy-io/react-auth";
 import { Copy, ExternalLink, LogOut, Check, ChevronDown, Wallet, User } from "lucide-react";
 
 const CHAIN_META: Record<number, { name: string; color: string }> = {
@@ -27,7 +27,9 @@ export default function WalletButton() {
   const { address, isConnected, connector } = useAccount();
   const { disconnect } = useDisconnect();
   const chainId = useChainId();
-  const { login } = usePrivy();
+  const { login, ready, authenticated } = usePrivy();
+  const { wallets } = useWallets();
+  const { logout } = useLogout();
   const navigate = useNavigate();
   const { data: balance } = useBalance({ address });
   const [dropOpen, setDropOpen] = useState(false);
@@ -44,20 +46,26 @@ export default function WalletButton() {
   }, []);
 
   const copyAddress = () => {
-    if (!address) return;
-    navigator.clipboard.writeText(address);
+    if (!effectiveAddress) return;
+    navigator.clipboard.writeText(effectiveAddress);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
+
+  // Use Privy wallet address as fallback when wagmi hasn't synced yet
+  const privyAddress = wallets[0]?.address as `0x${string}` | undefined;
+  const effectiveAddress = address ?? privyAddress;
+  const effectiveConnected = isConnected || (authenticated && !!privyAddress);
 
   const chain = CHAIN_META[chainId];
   const bal = balance ? (Number(balance.value) / 10 ** balance.decimals).toFixed(4) : "0.0000";
 
   // ── Disconnected ──────────────────────────────────────────────────────────
-  if (!isConnected) {
+  if (!effectiveConnected) {
     return (
       <button
-        onClick={() => login()}
+        onClick={() => ready && login()}
+        disabled={!ready}
         style={{
           display: "flex", alignItems: "center", gap: "0.45rem",
           padding: "0.35rem 0.9rem",
@@ -88,6 +96,7 @@ export default function WalletButton() {
   }
 
   // ── Connected ─────────────────────────────────────────────────────────────
+  const displayAddress = effectiveAddress;
   return (
     <div ref={ref} style={{ position: "relative" }}>
       <button
@@ -125,7 +134,7 @@ export default function WalletButton() {
           fontFamily: "'Share Tech Mono', monospace",
           letterSpacing: "0.02em",
         }}>
-          {address ? truncate(address) : ""}
+          {displayAddress ? truncate(displayAddress) : ""}
         </span>
 
         <ChevronDown
@@ -164,7 +173,7 @@ export default function WalletButton() {
                 letterSpacing: "0.03em",
                 overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
               }}>
-                {address}
+                {displayAddress}
               </span>
               <button
                 onClick={copyAddress}
@@ -174,7 +183,7 @@ export default function WalletButton() {
                 {copied ? <Check size={13} /> : <Copy size={13} />}
               </button>
               <a
-                href={`https://etherscan.io/address/${address}`}
+                href={`https://explore.mainnet.tempo.xyz/address/${displayAddress}`}
                 target="_blank"
                 rel="noreferrer"
                 title="View on explorer"
@@ -233,7 +242,7 @@ export default function WalletButton() {
               <User size={11} /> VIEW PROFILE
             </button>
             <button
-              onClick={() => { disconnect(); setDropOpen(false); }}
+              onClick={() => { logout(); disconnect(); setDropOpen(false); }}
               style={{
                 width: "100%", padding: "0.5rem 0.75rem",
                 background: "var(--punk-dim)", border: "1px solid var(--punk)",

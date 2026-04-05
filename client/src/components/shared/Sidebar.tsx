@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
   ArrowLeftRight, Droplets, TrendingUp, Layers,
-  Lock, Trophy, Zap, ExternalLink, X, Coins, BarChart2,
+  Lock, Trophy, ExternalLink, X, Coins, BarChart2,
   Rocket, ArrowRightLeft, User, Plus, ChevronLeft, ChevronRight, Home, Activity,
 } from "lucide-react";
 import { useIsAdmin } from "../../hooks/useIsAdmin";
@@ -74,7 +74,7 @@ export default function Sidebar({ isMobile, isOpen, onClose, isCollapsed, onTogg
   if (isMobile && !isOpen) return null;
 
   const collapsed = !isMobile && !!isCollapsed;
-  const width = collapsed ? 60 : 220;
+  const width = collapsed ? 48 : 200;
 
   return (
     <>
@@ -97,7 +97,7 @@ export default function Sidebar({ isMobile, isOpen, onClose, isCollapsed, onTogg
         borderRight: "1px solid var(--border)",
         display: "flex",
         flexDirection: "column",
-        padding: collapsed ? "1.25rem 0" : "1.25rem 0.75rem",
+        padding: collapsed ? "0.75rem 0" : "0.75rem 0.6rem",
         position: "fixed",
         left: 0, top: 0, bottom: 0,
         zIndex: 50,
@@ -117,52 +117,36 @@ export default function Sidebar({ isMobile, isOpen, onClose, isCollapsed, onTogg
         {/* Logo + collapse toggle */}
         <div style={{
           display: "flex", alignItems: "center",
-          marginBottom: "1.75rem",
-          padding: collapsed ? "0" : "0 0.5rem",
+          marginBottom: "1rem",
+          padding: collapsed ? "0" : "0 0.25rem",
           justifyContent: collapsed ? "center" : "space-between",
           position: "relative",
         }}>
           {!collapsed && (
-            <NavLink to="/" end onClick={onClose} style={{ display: "flex", alignItems: "center", gap: "0.7rem", textDecoration: "none", flex: 1 }}>
-              <div style={{
-                width: 32, height: 32,
-                background: "var(--bg-deep)",
-                border: "1px solid var(--accent)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0,
-                boxShadow: "0 0 14px var(--accent-glow)",
-              }}>
-                <Zap size={15} color="var(--accent)" strokeWidth={2.5} />
-              </div>
-              <div>
-                <div style={{
-                  fontWeight: 900, fontSize: 18, lineHeight: 1,
-                  letterSpacing: "-0.5px",
-                  color: "var(--text)",
-                  fontFamily: "'Rajdhani', 'Inter', sans-serif",
-                }}>
-                  JINK<span style={{ color: "var(--accent)" }}>FI</span>
-                </div>
-                <div style={{
-                  fontSize: 9, letterSpacing: "0.22em", color: "var(--text-muted)",
-                  fontFamily: "'Share Tech Mono', monospace",
-                  marginTop: "0.1rem",
-                }}>DEX v3.0</div>
-              </div>
+            <NavLink to="/" end onClick={onClose} style={{ display: "flex", alignItems: "center", textDecoration: "none", flex: 1 }}>
+              <img
+                src="https://i.ibb.co/gZdKMXtL/Jink-FI-logo-with-lightning-bolt-design.png"
+                alt="JinkFi"
+                style={{
+                  width: 110, height: "auto", display: "block",
+                  filter: "brightness(1.1) drop-shadow(0 0 6px rgba(212,175,55,0.3))",
+                  mixBlendMode: "lighten",
+                }}
+              />
             </NavLink>
           )}
 
           {collapsed && (
             <NavLink to="/" end style={{ display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>
-              <div style={{
-                width: 32, height: 32,
-                background: "var(--bg-deep)",
-                border: "1px solid var(--accent)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 0 14px var(--accent-glow)",
-              }}>
-                <Zap size={15} color="var(--accent)" strokeWidth={2.5} />
-              </div>
+              <img
+                src="https://i.ibb.co/gZdKMXtL/Jink-FI-logo-with-lightning-bolt-design.png"
+                alt="JinkFi"
+                style={{
+                  width: 36, height: 36, objectFit: "contain",
+                  filter: "brightness(1.1) drop-shadow(0 0 6px rgba(212,175,55,0.3))",
+                  mixBlendMode: "lighten",
+                }}
+              />
             </NavLink>
           )}
 
@@ -221,7 +205,7 @@ export default function Sidebar({ isMobile, isOpen, onClose, isCollapsed, onTogg
                   display: "flex",
                   alignItems: "center",
                   gap: collapsed ? 0 : "0.65rem",
-                  padding: collapsed ? "0.6rem 0" : "0.55rem 0.75rem",
+                  padding: collapsed ? "0.45rem 0" : "0.4rem 0.6rem",
                   justifyContent: collapsed ? "center" : "flex-start",
                   textDecoration: "none",
                   fontWeight: isActive ? 700 : 500,
@@ -235,7 +219,7 @@ export default function Sidebar({ isMobile, isOpen, onClose, isCollapsed, onTogg
               >
                 {({ isActive }) => (
                   <>
-                    <Icon size={collapsed ? 18 : 14} style={{ flexShrink: 0, opacity: isActive ? 1 : 0.5 }} color={isActive ? "var(--accent)" : undefined} />
+                    <Icon size={collapsed ? 15 : 13} style={{ flexShrink: 0, opacity: isActive ? 1 : 0.5 }} color={isActive ? "var(--accent)" : undefined} />
                     {!collapsed && (
                       <>
                         <span style={{ flex: 1 }}>{label}</span>
@@ -277,7 +261,7 @@ export default function Sidebar({ isMobile, isOpen, onClose, isCollapsed, onTogg
                   style={({ isActive }) => ({
                     display: "flex", alignItems: "center", gap: "0.65rem",
                     padding: "0.45rem 0.75rem", textDecoration: "none",
-                    fontSize: 11, fontWeight: isActive ? 700 : 500,
+                    fontSize: 12, fontWeight: isActive ? 700 : 500,
                     color: isActive ? "var(--accent)" : "var(--text-muted)",
                     background: isActive ? ACTIVE_BG : "transparent",
                     borderLeft: `3px solid ${isActive ? "var(--accent)" : "transparent"}`,
@@ -339,26 +323,14 @@ export default function Sidebar({ isMobile, isOpen, onClose, isCollapsed, onTogg
             <a href="http://jinklabs.xyz/" target="_blank" rel="noreferrer"
               style={{ display: "block", marginBottom: "0.65rem", textDecoration: "none" }}
             >
-              <img
-                src="https://i.ibb.co/6cLybwvn/Generated-Image-March-26-2026-4-41-PM.png"
-                alt="Jink Labs"
-                style={{
-                  width: "100%", height: "auto", display: "block",
-                  opacity: 0.55,
-                  filter: "sepia(1) saturate(2.5) hue-rotate(160deg) brightness(0.75)",
-                  transition: "opacity 0.2s, filter 0.2s",
-                }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget as HTMLImageElement;
-                  el.style.opacity = "0.8";
-                  el.style.filter = "sepia(1) saturate(3.5) hue-rotate(160deg) brightness(0.9)";
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget as HTMLImageElement;
-                  el.style.opacity = "0.55";
-                  el.style.filter = "sepia(1) saturate(2.5) hue-rotate(160deg) brightness(0.75)";
-                }}
-              />
+              <div style={{
+                fontSize: 10, color: "var(--text-muted)",
+                fontFamily: "'Share Tech Mono', monospace",
+                letterSpacing: "0.08em",
+              }}>
+                Powered By{" "}
+                <span style={{ color: "var(--accent)", fontWeight: 700 }}>Jinklabs.xyz</span>
+              </div>
             </a>
 
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>

@@ -102,7 +102,16 @@
       "Bash(grep -h '\"\"contractName\"\"' \"C:\\\\Users\\\\avone\\\\OneDrive\\\\Desktop\\\\Jink Labs\\\\jinkfidex\\\\jinkfidex\\\\contracts\\\\artifacts\\\\contracts\\\\locker\\\\TokenLockerManagerV1.sol\\\\TokenLockerManagerV1.json\" \"C:\\\\Users\\\\avone\\\\OneDrive\\\\Desktop\\\\Jink Labs\\\\jinkfidex\\\\jinkfidex\\\\contracts\\\\artifacts\\\\contracts\\\\locker\\\\TokenLockerV1.sol\\\\TokenLockerV1.json\")",
       "Bash(ls -d C:UsersavoneOneDriveDesktopJink Labsjinkfidexjinkfidexcontractsartifactscontractslocker/*)",
       "Bash(xargs -I {} basename {})",
-      "WebFetch(domain:gammaswap.com)"
+      "WebFetch(domain:gammaswap.com)",
+      "Bash(find 'C:/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex/client/src' -name *.ts -not -name *.tsx)",
+      "Bash(grep -rn \"mockPool\\\\|mockFarm\\\\|MOCK_\\\\|mockData\\\\|hardcoded\\\\|dummyData\\\\|fakeData\" 'C:/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex/client/src' --include=*.ts --include=*.tsx)",
+      "Bash(grep -rn \"MOCK_POOLS\\\\|mockPools\\\\|MOCK_FARMS\\\\|mockFarms\\\\|MOCK_QUESTS\\\\|mockQuests\\\\|farms\\\\.ts\" 'C:/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex/client/src' --include=*.ts --include=*.tsx)",
+      "Bash(grep -rn \"MOCK_POOLS\\\\|MOCK_FARMS\" 'C:/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex/client/src' --include=*.tsx --include=*.ts)",
+      "Bash(grep -rn \"mock\\\\|MOCK\\\\|hardcoded\\\\|dummy\\\\|fakeData\\\\|placeholder.*data\" 'C:/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex/client/src' --include=*.tsx --include=*.ts)",
+      "Bash(grep -v \"node_modules\\\\|//.*mock\\\\|comment\")",
+      "Bash(grep -rn \"hardcode\\\\|static.*data\\\\|\\\\[\\\\s*{.*chainId.*}\\\\s*\\\\]\\\\|const.*=.*\\\\[.*{\" 'C:/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex/client/src' --include=*.tsx --include=*.ts)",
+      "Bash(grep -rn \"Math\\\\.random\\\\|Math\\\\.floor.*Math\\\\.random\\\\|\\\\[.*,.*.*\\\\]\\\\|dummyPool\\\\|testData\\\\|sampleData\\\\|fakeToken\" 'C:/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex/client/src' --include=*.tsx --include=*.ts)",
+      "Bash(node -e \"require\\(''''./dist/index.js''''\\)\")"
     ]
   }
 }

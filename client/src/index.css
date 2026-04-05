@@ -104,6 +104,7 @@ html, body, #root {
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   letter-spacing: -0.01em;
+  font-size: 14px;
 }
 
 /* ── Responsive page headings ─────────────────── */
@@ -282,5 +283,11 @@ input[type="number"] { -moz-appearance: textfield; }
   #root > div > div { min-width: 0; }
 
   /* Page padding tighter on mobile */
-  .page-pad { padding: 1rem !important; }
+  .page-pad { padding: 0.75rem !important; }
 }
+
+/* ── Compact page layout ──────────────────────── */
+/* Reduce default card/input padding site-wide */
+h1 { font-size: 1.4rem; }
+h2 { font-size: 1.2rem; }
+h3 { font-size: 1rem; }

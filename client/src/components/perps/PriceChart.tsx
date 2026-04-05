@@ -24,38 +24,6 @@ const BINANCE_CONFIG: Record<Period, BinanceInterval> = {
   "1M": { interval: "1d",  limit: 30  },
 };
 
-// Fallback: generate realistic-looking OHLC data anchored to base price
-function generateCandles(base: number, count: number, intervalMs: number): CandlestickData[] {
-  const candles: CandlestickData[] = [];
-  let price = base * 0.92;
-  const now = Math.floor(Date.now() / 1000);
-  const intervalSec = Math.floor(intervalMs / 1000);
-  for (let i = count; i >= 0; i--) {
-    const open   = price;
-    const change = (Math.random() - 0.47) * base * 0.009;
-    const close  = Math.max(open * 0.96, open + change);
-    const high   = Math.max(open, close) * (1 + Math.random() * 0.005);
-    const low    = Math.min(open, close) * (1 - Math.random() * 0.005);
-    candles.push({
-      time:  (now - i * intervalSec) as unknown as CandlestickData["time"],
-      open:  parseFloat(open.toFixed(2)),
-      high:  parseFloat(high.toFixed(2)),
-      low:   parseFloat(low.toFixed(2)),
-      close: parseFloat(close.toFixed(2)),
-    });
-    price = close;
-  }
-  return candles;
-}
-
-const FALLBACK_INTERVAL_MS: Record<Period, number> = {
-  "1H": 60_000 * 5,
-  "4H": 60_000 * 15,
-  "1D": 60_000 * 60,
-  "1W": 60_000 * 60 * 4,
-  "1M": 60_000 * 60 * 24,
-};
-
 interface Props { market: Market; }
 
 export default function PriceChart({ market }: Props) {
@@ -138,9 +106,7 @@ export default function PriceChart({ market }: Props) {
         chartRef.current?.timeScale().fitContent();
       })
       .catch(() => {
-        const candles = generateCandles(market.markPrice, 120, FALLBACK_INTERVAL_MS[period]);
-        seriesRef.current?.setData(candles);
-        chartRef.current?.timeScale().fitContent();
+        seriesRef.current?.setData([]);
       });
   }, [market.symbol, period, feedKey, market.markPrice]);
 

@@ -35,7 +35,7 @@ export function usePerps() {
     // Simulate tx delay
     await new Promise(r => setTimeout(r, 1500));
     const newPos: Position = {
-      id: Math.random().toString(36).slice(2),
+      id: crypto.randomUUID(),
       market: selectedMarket.symbol,
       side,
       collateralUSD: collateralNum,
@@ -64,7 +64,7 @@ export function usePerps() {
       const market = PERP_MARKETS.find(m => m.symbol === pos.market);
       if (!market) return pos;
       const livePrice = livePrices?.[pos.market];
-      const markPrice = livePrice ?? market.markPrice * (1 + (Math.random() - 0.5) * 0.002);
+      const markPrice = livePrice ?? market.markPrice;
       const pnl = calcPnl(pos.side, pos.entryPrice, markPrice, pos.sizeUSD);
       return {
         ...pos,

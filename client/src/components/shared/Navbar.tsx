@@ -55,9 +55,9 @@ export default function Navbar({ isMobile, onMenuClick }: Props) {
         background: "rgba(0,21,32,0.97)",
         backdropFilter: "blur(24px)",
         borderBottom: "1px solid var(--border)",
-        padding: isMobile ? "0 1rem" : "0 1.5rem",
+        padding: isMobile ? "0 0.75rem" : "0 1rem",
         display: "flex", alignItems: "center",
-        height: 56, gap: "0.75rem",
+        height: 46, gap: "0.5rem",
         position: "relative",
       }}>
         {/* Bottom accent line */}

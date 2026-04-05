@@ -59,7 +59,7 @@ function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  const sidebarWidth = isMobile ? 0 : sidebarCollapsed ? 60 : 220;
+  const sidebarWidth = isMobile ? 0 : sidebarCollapsed ? 48 : 200;
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-deep)" }}>
