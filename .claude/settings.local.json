@@ -85,7 +85,12 @@
       "Bash(find '/c/Users/avone/OneDrive/Desktop/Jink Labs/jinkfi/client/src' -name Profile*)",
       "Bash(grep -r \"useReadContracts\\\\|useContractReads\" '/c/Users/avone/OneDrive/Desktop/Jink Labs/jinkfi/frontend' --include=*.tsx --include=*.ts -l)",
       "WebFetch(domain:explore.tempo.xyz)",
-      "Bash(grep -r tempo '/c/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex/contracts/' --include=*.ts --include=hardhat.config.* -l)"
+      "Bash(grep -r tempo '/c/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex/contracts/' --include=*.ts --include=hardhat.config.* -l)",
+      "Bash(redis-cli ping:*)",
+      "Bash(docker info:*)",
+      "Bash(docker run:*)",
+      "Bash(docker -H npipe:////./pipe/docker_engine run -d --name jinkfi-redis -p 6379:6379 redis:7-alpine)",
+      "Bash(docker context:*)"
     ]
   }
 }
