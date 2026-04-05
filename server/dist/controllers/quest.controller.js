@@ -20,9 +20,14 @@ const zod_1 = require("zod");
 const RPC_BY_CHAIN = {
     1: env_1.env.MAINNET_RPC_URL,
     8453: env_1.env.BASE_RPC_URL,
+    4217: env_1.env.TEMPO_RPC_URL,
 };
-async function verifyOnchainTx(txHash, userAddress, chainId = 1) {
-    const rpcUrl = RPC_BY_CHAIN[chainId] ?? env_1.env.MAINNET_RPC_URL;
+const NATIVE_SYMBOL_BY_CHAIN = {
+    1: "ETH", 8453: "ETH", 42161: "ETH", 10: "ETH",
+    4217: "USD",
+};
+async function verifyOnchainTx(txHash, userAddress, chainId = 4217) {
+    const rpcUrl = RPC_BY_CHAIN[chainId] ?? env_1.env.TEMPO_RPC_URL;
     const provider = new ethers_1.ethers.JsonRpcProvider(rpcUrl);
     const [tx, receipt] = await Promise.all([
         provider.getTransaction(txHash),
@@ -101,7 +106,7 @@ const QUEST_FEE_WEI = BigInt(Math.round(parseFloat(env_1.env.QUEST_FEE_ETH) * 1e
 // ── Quest Submissions ──────────────────────────────────────────────────────────
 const submitQuestSchema = zod_1.z.object({
     paymentTxHash: zod_1.z.string().regex(/^0x[0-9a-fA-F]{64}$/),
-    paymentChainId: zod_1.z.number().optional().default(1),
+    paymentChainId: zod_1.z.number().optional().default(4217),
     title: zod_1.z.string().min(3).max(120),
     description: zod_1.z.string().min(10).max(2000),
     projectName: zod_1.z.string().min(2).max(80),
@@ -130,7 +135,8 @@ const submitQuestSchema = zod_1.z.object({
 async function submitQuest(req, res) {
     const body = submitQuestSchema.parse(req.body);
     // Verify payment on-chain
-    const rpcUrl = RPC_BY_CHAIN[body.paymentChainId] ?? env_1.env.MAINNET_RPC_URL;
+    const rpcUrl = RPC_BY_CHAIN[body.paymentChainId] ?? env_1.env.TEMPO_RPC_URL;
+    const nativeSymbol = NATIVE_SYMBOL_BY_CHAIN[body.paymentChainId] ?? "USD";
     const provider = new ethers_1.ethers.JsonRpcProvider(rpcUrl);
     const [tx, receipt] = await Promise.all([
         provider.getTransaction(body.paymentTxHash),
@@ -147,7 +153,7 @@ async function submitQuest(req, res) {
     if (tx.to?.toLowerCase() !== env_1.env.FEE_RECIPIENT_ADDRESS.toLowerCase())
         throw new errorHandler_1.AppError(400, "Payment was not sent to the correct fee address");
     if (tx.value < QUEST_FEE_WEI)
-        throw new errorHandler_1.AppError(400, `Payment must be at least ${env_1.env.QUEST_FEE_ETH} ETH`);
+        throw new errorHandler_1.AppError(400, `Payment must be at least ${env_1.env.QUEST_FEE_ETH} ${nativeSymbol}`);
     // Prevent duplicate submissions for the same tx
     const duplicate = await db_1.prisma.questSubmission.findFirst({ where: { paymentTxHash: body.paymentTxHash } });
     if (duplicate)

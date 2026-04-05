@@ -8,6 +8,10 @@ export default defineConfig({
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") },
   },
+  define: {
+    // Polyfill Buffer for wagmi/ethers deps that reference it in browser context
+    global: "globalThis",
+  },
   server: {
     port: 5173,
     proxy: {

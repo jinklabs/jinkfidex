@@ -7,7 +7,7 @@ import { z } from "zod";
 
 // GET /api/pools?chainId=1
 export async function listPools(req: Request, res: Response) {
-  const chainId = parseInt(req.query.chainId as string) || 1;
+  const chainId = parseInt(req.query.chainId as string) || 4217;
   const cacheKey = CacheKeys.pools(chainId);
 
   const cached = await cacheGet(cacheKey);
@@ -24,7 +24,7 @@ export async function listPools(req: Request, res: Response) {
 
 // GET /api/pools/:address?chainId=1
 export async function getPool(req: Request, res: Response) {
-  const chainId = parseInt(req.query.chainId as string) || 1;
+  const chainId = parseInt(req.query.chainId as string) || 4217;
   const address = String(req.params.address).toLowerCase();
   const cacheKey = CacheKeys.pool(address, chainId);
 

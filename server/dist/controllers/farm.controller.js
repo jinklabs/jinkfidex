@@ -6,7 +6,7 @@ const redis_1 = require("../config/redis");
 const env_1 = require("../config/env");
 // GET /api/farms?chainId=1
 async function listFarms(req, res) {
-    const chainId = parseInt(req.query.chainId) || 1;
+    const chainId = parseInt(req.query.chainId) || 4217;
     const cacheKey = redis_1.CacheKeys.farms(chainId);
     const cached = await (0, redis_1.cacheGet)(cacheKey);
     if (cached) {

@@ -391,7 +391,7 @@ export default function BridgePage() {
           letterSpacing: "0.08em", fontFamily: "'Rajdhani', sans-serif",
         }}>BRIDGE</h1>
         <p style={{ color: "var(--text-muted)", fontSize: 12, fontFamily: "'Share Tech Mono', monospace" }}>
-          Transfer assets across chains · powered by Li.Fi
+          Transfer assets across chains
         </p>
       </div>
 

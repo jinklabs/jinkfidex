@@ -29,6 +29,7 @@ exports.env = {
     // RPC for on-chain task verification
     MAINNET_RPC_URL: optional("MAINNET_RPC_URL", "https://cloudflare-eth.com"),
     BASE_RPC_URL: optional("BASE_RPC_URL", "https://mainnet.base.org"),
+    TEMPO_RPC_URL: optional("TEMPO_RPC_URL", "https://rpc.tempo.xyz"),
     // Optional social verification
     TWITTER_BEARER_TOKEN: optional("TWITTER_BEARER_TOKEN", ""),
     DISCORD_BOT_TOKEN: optional("DISCORD_BOT_TOKEN", ""),

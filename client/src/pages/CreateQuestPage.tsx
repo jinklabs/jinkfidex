@@ -5,9 +5,12 @@ import { parseEther } from "viem";
 import { Plus, Trash2, ChevronRight, ChevronLeft, Zap, CheckCircle2, Loader, ExternalLink } from "lucide-react";
 import { questApi, type QuestSubmissionInput } from "../api/client";
 
-const QUEST_FEE_ETH = "0.05";
+const QUEST_FEE = "0.05";
 // Set this to your fee recipient wallet address
 const FEE_RECIPIENT = import.meta.env.VITE_FEE_RECIPIENT_ADDRESS ?? "0x0000000000000000000000000000000000000000";
+
+const NATIVE_SYMBOL: Record<number, string> = { 1: "ETH", 8453: "ETH", 42161: "ETH", 10: "ETH", 4217: "USD" };
+const EXPLORER_BASE: Record<number, string> = { 1: "https://etherscan.io", 8453: "https://basescan.org", 4217: "https://explore.mainnet.tempo.xyz" };
 
 const TASK_TYPES = [
   { value: "twitter_follow",  label: "Twitter Follow"  },
@@ -48,6 +51,8 @@ export default function CreateQuestPage() {
   const navigate = useNavigate();
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
+  const nativeSymbol = NATIVE_SYMBOL[chainId] ?? "ETH";
+  const explorerBase = EXPLORER_BASE[chainId] ?? "https://etherscan.io";
   const { sendTransactionAsync } = useSendTransaction();
 
   const [step, setStep] = useState(0);
@@ -141,7 +146,7 @@ export default function CreateQuestPage() {
     try {
       const hash = await sendTransactionAsync({
         to:    FEE_RECIPIENT as `0x${string}`,
-        value: parseEther(QUEST_FEE_ETH),
+        value: parseEther(QUEST_FEE),
       });
       setTxHash(hash);
     } catch (err: unknown) {
@@ -241,7 +246,7 @@ export default function CreateQuestPage() {
           </h1>
         </div>
         <p style={{ color: "var(--text-muted)", fontSize: 11, margin: 0, fontFamily: "'Share Tech Mono', monospace" }}>
-          Third-party quest submissions require a {QUEST_FEE_ETH} ETH listing fee and admin approval.
+          Third-party quest submissions require a {QUEST_FEE} {nativeSymbol} listing fee and admin approval.
         </p>
       </div>
 
@@ -485,7 +490,7 @@ export default function CreateQuestPage() {
               LISTING FEE
             </div>
             <div style={{ fontWeight: 900, fontSize: 28, fontFamily: "'Rajdhani', sans-serif", color: "var(--accent)", lineHeight: 1 }}>
-              {QUEST_FEE_ETH} ETH
+              {QUEST_FEE} {nativeSymbol}
             </div>
             <div style={{ fontSize: 10, color: "var(--text-muted)", fontFamily: "'Share Tech Mono', monospace", marginTop: "0.35rem" }}>
               One-time fee per quest submission. Covers admin review costs. Non-refundable if rejected.
@@ -502,7 +507,7 @@ export default function CreateQuestPage() {
               display: "flex", alignItems: "center", justifyContent: "space-between",
             }}>
               <span>{FEE_RECIPIENT}</span>
-              <a href={`https://etherscan.io/address/${FEE_RECIPIENT}`} target="_blank" rel="noreferrer"
+              <a href={`${explorerBase}/address/${FEE_RECIPIENT}`} target="_blank" rel="noreferrer"
                 style={{ color: "var(--text-muted)", display: "flex" }}>
                 <ExternalLink size={12} />
               </a>
@@ -527,7 +532,7 @@ export default function CreateQuestPage() {
                 marginBottom: "1rem",
               }}
             >
-              {sending ? <><Loader size={13} style={{ animation: "spin 1s linear infinite" }} /> SENDING…</> : <><Zap size={13} /> PAY {QUEST_FEE_ETH} ETH</>}
+              {sending ? <><Loader size={13} style={{ animation: "spin 1s linear infinite" }} /> SENDING…</> : <><Zap size={13} /> PAY {QUEST_FEE} {nativeSymbol}</>}
             </button>
           ) : (
             <div style={{

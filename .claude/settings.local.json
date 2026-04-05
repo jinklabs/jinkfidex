@@ -90,7 +90,19 @@
       "Bash(docker info:*)",
       "Bash(docker run:*)",
       "Bash(docker -H npipe:////./pipe/docker_engine run -d --name jinkfi-redis -p 6379:6379 redis:7-alpine)",
-      "Bash(docker context:*)"
+      "Bash(docker context:*)",
+      "Bash(npx ts-node --transpile-only -e \":*)",
+      "Bash(npx ts-node-dev:*)",
+      "Bash(npx tsx:*)",
+      "Bash(python3:*)",
+      "Bash(/tmp/compile_abis.sh:*)",
+      "Bash(chmod +x /tmp/compile_abis.sh)",
+      "Bash(bash /tmp/compile_abis.sh)",
+      "Bash(grep -h '\"\"contractName\"\"' \"C:\\\\Users\\\\avone\\\\OneDrive\\\\Desktop\\\\Jink Labs\\\\jinkfidex\\\\jinkfidex\\\\contracts\\\\artifacts\\\\contracts\\\\JinkFarm.sol\\\\JinkFarm.json\" \"C:\\\\Users\\\\avone\\\\OneDrive\\\\Desktop\\\\Jink Labs\\\\jinkfidex\\\\jinkfidex\\\\contracts\\\\artifacts\\\\contracts\\\\TokenLocker.sol\\\\TokenLocker.json\")",
+      "Bash(grep -h '\"\"contractName\"\"' \"C:\\\\Users\\\\avone\\\\OneDrive\\\\Desktop\\\\Jink Labs\\\\jinkfidex\\\\jinkfidex\\\\contracts\\\\artifacts\\\\contracts\\\\locker\\\\TokenLockerManagerV1.sol\\\\TokenLockerManagerV1.json\" \"C:\\\\Users\\\\avone\\\\OneDrive\\\\Desktop\\\\Jink Labs\\\\jinkfidex\\\\jinkfidex\\\\contracts\\\\artifacts\\\\contracts\\\\locker\\\\TokenLockerV1.sol\\\\TokenLockerV1.json\")",
+      "Bash(ls -d C:UsersavoneOneDriveDesktopJink Labsjinkfidexjinkfidexcontractsartifactscontractslocker/*)",
+      "Bash(xargs -I {} basename {})",
+      "WebFetch(domain:gammaswap.com)"
     ]
   }
 }

@@ -10,7 +10,7 @@ const errorHandler_1 = require("../middleware/errorHandler");
 const zod_1 = require("zod");
 // GET /api/pools?chainId=1
 async function listPools(req, res) {
-    const chainId = parseInt(req.query.chainId) || 1;
+    const chainId = parseInt(req.query.chainId) || 4217;
     const cacheKey = redis_1.CacheKeys.pools(chainId);
     const cached = await (0, redis_1.cacheGet)(cacheKey);
     if (cached) {
@@ -27,7 +27,7 @@ async function listPools(req, res) {
 }
 // GET /api/pools/:address?chainId=1
 async function getPool(req, res) {
-    const chainId = parseInt(req.query.chainId) || 1;
+    const chainId = parseInt(req.query.chainId) || 4217;
     const address = String(req.params.address).toLowerCase();
     const cacheKey = redis_1.CacheKeys.pool(address, chainId);
     const cached = await (0, redis_1.cacheGet)(cacheKey);

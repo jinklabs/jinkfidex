@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 import { Droplets, Lock } from "lucide-react";
 import { lockApi, type Lock as LockType } from "../../api/client";
 import LockStatusBadge from "./LockStatusBadge";
@@ -8,6 +8,7 @@ import LockActionModal from "./LockActionModal";
 
 export default function LiquidityLockerPanel() {
   const { address, isConnected } = useAccount();
+  const chainId = useChainId();
   const queryClient = useQueryClient();
 
   const { data: locks, isLoading } = useQuery({
@@ -27,7 +28,7 @@ export default function LiquidityLockerPanel() {
     setIsPending(true);
     setError(null);
     try {
-      await lockApi.create({ ...form, lockType: "lp", owner: address!, chainId: 1 });
+      await lockApi.create({ ...form, lockType: "lp", owner: address!, chainId });
       queryClient.invalidateQueries({ queryKey: ["locks"] });
       setForm({ tokenAddress: "", amount: "", unlockDate: "" });
     } catch (err: unknown) {

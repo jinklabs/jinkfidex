@@ -13,16 +13,21 @@ const zod_1 = require("zod");
 const RPC_BY_CHAIN = {
     1: env_1.env.MAINNET_RPC_URL,
     8453: env_1.env.BASE_RPC_URL,
+    4217: env_1.env.TEMPO_RPC_URL,
+};
+const NATIVE_SYMBOL_BY_CHAIN = {
+    1: "ETH", 8453: "ETH", 42161: "ETH", 10: "ETH",
+    4217: "USD",
 };
 const PERPS_FEE_WEI = BigInt(Math.round(parseFloat(env_1.env.QUEST_FEE_ETH) * 1e18));
 const submitSchema = zod_1.z.object({
     paymentTxHash: zod_1.z.string().regex(/^0x[0-9a-fA-F]{64}$/),
-    paymentChainId: zod_1.z.number().optional().default(1),
+    paymentChainId: zod_1.z.number().optional().default(4217),
     tokenAddress: zod_1.z.string().regex(/^0x[0-9a-fA-F]{40}$/),
     tokenSymbol: zod_1.z.string().min(1).max(20),
     tokenName: zod_1.z.string().min(1).max(80),
     quoteAsset: zod_1.z.enum(["USDT", "USDC"]).default("USDT"),
-    chainId: zod_1.z.number().optional().default(1),
+    chainId: zod_1.z.number().optional().default(4217),
     oracleType: zod_1.z.enum(["chainlink", "pyth", "custom"]).default("chainlink"),
     oracleAddress: zod_1.z.string().regex(/^0x[0-9a-fA-F]{40}$/).optional(),
     maxLeverage: zod_1.z.number().int().min(2).max(500).default(100),
@@ -42,7 +47,8 @@ const reviewSchema = zod_1.z.object({ adminNote: zod_1.z.string().optional() });
 // POST /api/perps/submit
 async function submitPerps(req, res) {
     const body = submitSchema.parse(req.body);
-    const rpcUrl = RPC_BY_CHAIN[body.paymentChainId] ?? env_1.env.MAINNET_RPC_URL;
+    const rpcUrl = RPC_BY_CHAIN[body.paymentChainId] ?? env_1.env.TEMPO_RPC_URL;
+    const nativeSymbol = NATIVE_SYMBOL_BY_CHAIN[body.paymentChainId] ?? "USD";
     const provider = new ethers_1.ethers.JsonRpcProvider(rpcUrl);
     const [tx, receipt] = await Promise.all([
         provider.getTransaction(body.paymentTxHash),
@@ -59,7 +65,7 @@ async function submitPerps(req, res) {
     if (tx.to?.toLowerCase() !== env_1.env.FEE_RECIPIENT_ADDRESS.toLowerCase())
         throw new errorHandler_1.AppError(400, "Payment not sent to correct fee address");
     if (tx.value < PERPS_FEE_WEI)
-        throw new errorHandler_1.AppError(400, `Payment must be at least ${env_1.env.QUEST_FEE_ETH} ETH`);
+        throw new errorHandler_1.AppError(400, `Payment must be at least ${env_1.env.QUEST_FEE_ETH} ${nativeSymbol}`);
     const duplicate = await db_1.prisma.perpsSubmission.findFirst({ where: { paymentTxHash: body.paymentTxHash } });
     if (duplicate)
         throw new errorHandler_1.AppError(409, "Transaction already used for a submission");

@@ -31,19 +31,17 @@ interface UIContextValue {
 const UIContext = createContext<UIContextValue | null>(null);
 
 export function UIProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() =>
-    (localStorage.getItem("jinkfi_theme") as Theme) ?? "dark"
-  );
+  const [theme] = useState<Theme>("dark");
   const [locale, setLocale] = useState<Locale>(() =>
     (localStorage.getItem("jinkfi_locale") as Locale) ?? "en"
   );
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("jinkfi_theme", theme);
-  }, [theme]);
+    document.documentElement.setAttribute("data-theme", "dark");
+    localStorage.removeItem("jinkfi_theme");
+  }, []);
 
-  const toggleTheme  = () => setTheme(t => t === "dark" ? "light" : "dark");
+  const toggleTheme = () => {};
   const toggleLocale = () => {
     const next: Locale = locale === "en" ? "zh" : "en";
     localStorage.setItem("jinkfi_locale", next);

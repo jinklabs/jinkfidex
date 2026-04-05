@@ -1,7 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { Menu, Sun, Moon } from "lucide-react";
-import { useAuth } from "../../hooks/useAuth";
-import { useAccount } from "wagmi";
+import { Menu } from "lucide-react";
 import { useUI } from "../../context/UIContext";
 import Ticker from "./Ticker";
 import ChainSwitcher from "./ChainSwitcher";
@@ -31,9 +29,7 @@ interface Props {
 
 export default function Navbar({ isMobile, onMenuClick }: Props) {
   const { pathname } = useLocation();
-  const { isConnected } = useAccount();
-  const { isAuthenticated, signIn, signOut } = useAuth();
-  const { theme, toggleTheme, locale, toggleLocale } = useUI();
+  const { locale, toggleLocale } = useUI();
 
   const title = PAGE_TITLES[pathname] ?? (
     pathname.startsWith("/quests/") ? "QUEST" :
@@ -56,7 +52,7 @@ export default function Navbar({ isMobile, onMenuClick }: Props) {
   return (
     <header style={{ position: "sticky", top: 0, zIndex: 40 }}>
       <nav style={{
-        background: theme === "light" ? "rgba(245,245,240,0.97)" : "rgba(0,21,32,0.97)",
+        background: "rgba(0,21,32,0.97)",
         backdropFilter: "blur(24px)",
         borderBottom: "1px solid var(--border)",
         padding: isMobile ? "0 1rem" : "0 1.5rem",
@@ -114,38 +110,7 @@ export default function Navbar({ isMobile, onMenuClick }: Props) {
             </button>
           )}
 
-          {/* Theme toggle */}
-          <button
-            onClick={toggleTheme}
-            style={iconBtnStyle}
-            title={theme === "dark" ? "Light mode" : "Dark mode"}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.color = "var(--accent)"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-muted)"; }}
-          >
-            {theme === "dark" ? <Sun size={13} /> : <Moon size={13} />}
-          </button>
-
           <ChainSwitcher />
-
-          {isConnected && !isMobile && (
-            <button
-              onClick={isAuthenticated ? signOut : signIn}
-              style={{
-                padding: "0.28rem 0.8rem", height: 32,
-                border: `1px solid ${isAuthenticated ? "var(--border)" : "var(--punk)"}`,
-                background: "transparent",
-                color: isAuthenticated ? "var(--text-muted)" : "var(--punk)",
-                cursor: "pointer", fontSize: 11, fontWeight: 700,
-                letterSpacing: "0.08em",
-                boxShadow: isAuthenticated ? "none" : "0 0 10px var(--punk-glow)",
-                transition: "all 0.15s",
-                fontFamily: "'Share Tech Mono', monospace",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {isAuthenticated ? "SIGNED IN" : "SIGN IN"}
-            </button>
-          )}
           <WalletButton />
         </div>
       </nav>

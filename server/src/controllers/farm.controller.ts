@@ -5,7 +5,7 @@ import { env } from "../config/env";
 
 // GET /api/farms?chainId=1
 export async function listFarms(req: Request, res: Response) {
-  const chainId = parseInt(req.query.chainId as string) || 1;
+  const chainId = parseInt(req.query.chainId as string) || 4217;
   const cacheKey = CacheKeys.farms(chainId);
 
   const cached = await cacheGet(cacheKey);

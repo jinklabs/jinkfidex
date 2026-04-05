@@ -19,10 +19,21 @@ function getRedis() {
             maxRetriesPerRequest: 3,
             enableReadyCheck: true,
             lazyConnect: true,
+            retryStrategy: (times) => {
+                // Stop retrying after 3 attempts; log only once
+                if (times >= 3)
+                    return null;
+                return Math.min(times * 500, 2000);
+            },
         });
+        let _redisErrLogged = false;
         redis.on("connect", () => console.log("✅ Redis connected"));
-        redis.on("error", (err) => console.error("❌ Redis error:", err.message));
-        redis.on("reconnecting", () => console.log("🔄 Redis reconnecting..."));
+        redis.on("error", (err) => {
+            if (!_redisErrLogged) {
+                console.warn("⚠️  Redis unavailable:", err.message);
+                _redisErrLogged = true;
+            }
+        });
     }
     return redis;
 }

@@ -95,12 +95,12 @@ export const perpsApi = {
 };
 
 export const poolApi = {
-  list: (chainId = 1) => api.get<Pool[]>(`/pools?chainId=${chainId}`),
-  get: (address: string, chainId = 1) => api.get<Pool>(`/pools/${address}?chainId=${chainId}`),
+  list: (chainId = 4217) => api.get<Pool[]>(`/pools?chainId=${chainId}`),
+  get: (address: string, chainId = 4217) => api.get<Pool>(`/pools/${address}?chainId=${chainId}`),
 };
 
 export const farmApi = {
-  list: (chainId = 1) => api.get<Farm[]>(`/farms?chainId=${chainId}`),
+  list: (chainId = 4217) => api.get<Farm[]>(`/farms?chainId=${chainId}`),
 };
 
 export const lockApi = {

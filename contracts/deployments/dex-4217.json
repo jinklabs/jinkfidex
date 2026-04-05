@@ -1,0 +1,19 @@
+{
+  "network": "tempo",
+  "chainId": "4217",
+  "timestamp": "2026-04-05T07:19:04.486Z",
+  "deployer": "0xf7a5a11C99AaFc17a066d97b38CB87DaEc086fba",
+  "contracts": {
+    "weth9": "0xE657646165f00907e8cBcFE5aDB8A6F5cdc5f454",
+    "v2Factory": "0xd8db8b03281ee11DF78944772778843C54814913",
+    "v2Router": "0xd74136ec9100303861B08b809fEAbC333611dA66",
+    "v3Factory": "0x28b25620F0956f509Bd0E07ED9D9Ad53725D2752",
+    "nftDescriptor": "0x64b2088b09172852746de1cf4F1BE40daBe8b297",
+    "nftPositionDescriptor": "0xc4d706Aa21DEca5E8B0de8ac772EAFf6d87C5b4B",
+    "nonfungiblePositionManager": "0x6535b354cEAD3739a6403D84E679F6d537039052",
+    "v3SwapRouter": "0xCdBF78b0c7e4428093Fe60973E9379D5BcFe1BBB",
+    "quoterV2": "0x1EB1AF14374F61B30b2D96841c6F48d473aa1b8c",
+    "tickLens": "0xC68F9E5b0dd349dBA24bD54616089A6f9094A6D7",
+    "universalRouter": "0x7482240897747fE08E0aAf80A8C83081B6cce67A"
+  }
+}

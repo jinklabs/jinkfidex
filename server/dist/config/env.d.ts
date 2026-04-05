@@ -11,6 +11,7 @@ export declare const env: {
     CACHE_TTL_LONG: number;
     MAINNET_RPC_URL: string;
     BASE_RPC_URL: string;
+    TEMPO_RPC_URL: string;
     TWITTER_BEARER_TOKEN: string;
     DISCORD_BOT_TOKEN: string;
     QUEST_FEE_ETH: string;

@@ -23,13 +23,13 @@ createRoot(document.getElementById("root")!).render(
         defaultChain: supportedChains[0],
       }}
     >
-      <WagmiProvider config={wagmiConfig}>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider config={wagmiConfig}>
           <BrowserRouter>
             <App />
           </BrowserRouter>
-        </QueryClientProvider>
-      </WagmiProvider>
+        </WagmiProvider>
+      </QueryClientProvider>
     </PrivyProvider>
   </StrictMode>
 );
