@@ -31,7 +31,9 @@ app.use(errorHandler);
 // ── Start ─────────────────────────────────────────────────────────────────────
 async function start() {
   await connectDB();
-  await connectRedis();
+  await connectRedis().catch((err) => {
+    console.warn("⚠️  Redis unavailable, running without cache:", err.message);
+  });
 
   app.listen(env.PORT, () => {
     console.log(`\n🚀 JinkFi API running at http://localhost:${env.PORT}`);
