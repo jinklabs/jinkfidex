@@ -106,12 +106,12 @@ export function useLocker() {
 
   // ── Batch-read my lock data ───────────────────────────────────────────────
 
-  const myTokenCalls = ((myTokenIds as bigint[]) ?? []).map(id => ({
+  const myTokenCalls = ((myTokenIds as unknown as bigint[]) ?? []).map(id => ({
     address: managerAddress!, abi: TOKEN_LOCKER_MANAGER_ABI,
     functionName: "getTokenLockData" as const, args: [id] as [bigint],
   }));
 
-  const myLpCalls = ((myLpIds as bigint[]) ?? []).map(id => ({
+  const myLpCalls = ((myLpIds as unknown as bigint[]) ?? []).map(id => ({
     address: managerAddress!, abi: TOKEN_LOCKER_MANAGER_ABI,
     functionName: "getLpLockData" as const, args: [id] as [bigint],
   }));

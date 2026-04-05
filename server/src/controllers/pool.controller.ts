@@ -25,7 +25,7 @@ export async function listPools(req: Request, res: Response) {
 // GET /api/pools/:address?chainId=1
 export async function getPool(req: Request, res: Response) {
   const chainId = parseInt(req.query.chainId as string) || 1;
-  const address = req.params.address.toLowerCase();
+  const address = String(req.params.address).toLowerCase();
   const cacheKey = CacheKeys.pool(address, chainId);
 
   const cached = await cacheGet(cacheKey);

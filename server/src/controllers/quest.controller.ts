@@ -135,7 +135,7 @@ const submitQuestSchema = z.object({
     points:      z.number().int().min(1).max(10000),
     required:    z.boolean().default(false),
     link:        z.string().url().optional(),
-    metadata:    z.record(z.unknown()).optional(),
+    metadata:    z.record(z.string(), z.unknown()).optional(),
   })).min(1).max(20),
   rewards: z.array(z.object({
     type:   z.string(),
@@ -182,8 +182,8 @@ export async function submitQuest(req: AuthRequest, res: Response) {
       startDate:   new Date(body.startDate),
       endDate:     new Date(body.endDate),
       tags:        body.tags,
-      tasksJson:   body.tasks,
-      rewardsJson: body.rewards,
+      tasksJson:   body.tasks as object[],
+      rewardsJson: body.rewards as object[],
     },
   });
 
@@ -216,7 +216,7 @@ const reviewSchema = z.object({
 
 // POST /api/quests/submissions/:subId/approve  (admin only)
 export async function approveSubmission(req: AuthRequest, res: Response) {
-  const { subId } = req.params;
+  const subId = String(req.params.subId);
   const { adminNote } = reviewSchema.parse(req.body);
 
   const sub = await prisma.questSubmission.findUnique({ where: { id: subId } });
@@ -277,7 +277,7 @@ export async function approveSubmission(req: AuthRequest, res: Response) {
 
 // POST /api/quests/submissions/:subId/reject  (admin only)
 export async function rejectSubmission(req: AuthRequest, res: Response) {
-  const { subId } = req.params;
+  const subId = String(req.params.subId);
   const { adminNote } = reviewSchema.parse(req.body);
 
   const sub = await prisma.questSubmission.findUnique({ where: { id: subId } });
@@ -308,10 +308,11 @@ export async function listQuests(req: Request, res: Response) {
     orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
   });
 
-  const result = quests.map((q) => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result = (quests as any[]).map((q) => ({
     ...q,
-    totalParticipants: q._count.progress,
-    totalPoints: q.tasks.reduce((s, t) => s + t.points, 0),
+    totalParticipants: q._count?.progress ?? 0,
+    totalPoints: q.tasks.reduce((s: number, t: { points: number }) => s + t.points, 0),
   }));
 
   await cacheSet(cacheKey, result, env.CACHE_TTL_MEDIUM);
@@ -320,7 +321,7 @@ export async function listQuests(req: Request, res: Response) {
 
 // GET /api/quests/:id
 export async function getQuest(req: Request, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
   const cacheKey = CacheKeys.quest(id);
   const cached = await cacheGet(cacheKey);
   if (cached) { res.setHeader("X-Cache", "HIT"); res.json(cached); return; }
@@ -336,27 +337,28 @@ export async function getQuest(req: Request, res: Response) {
 
   if (!quest) throw new AppError(404, "Quest not found");
 
-  const result = { ...quest, totalParticipants: quest._count.progress };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result = { ...(quest as any), totalParticipants: (quest as any)._count?.progress ?? 0 };
   await cacheSet(cacheKey, result, env.CACHE_TTL_MEDIUM);
   res.json(result);
 }
 
 // GET /api/quests/:id/leaderboard
 export async function getLeaderboard(req: Request, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
   const cacheKey = CacheKeys.questLeaderboard(id);
   const cached = await cacheGet(cacheKey);
   if (cached) { res.setHeader("X-Cache", "HIT"); res.json(cached); return; }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const leaderboard = await prisma.questProgress.findMany({
     where: { questId: id },
     orderBy: { pointsEarned: "desc" },
     take: 100,
     include: {
       user: { select: { address: true, username: true } },
-      quest: { include: { tasks: { select: { id: true } } } },
     },
-  });
+  }) as any[];
 
   const completionCounts = await prisma.taskCompletion.groupBy({
     by: ["userId"],
@@ -365,12 +367,13 @@ export async function getLeaderboard(req: Request, res: Response) {
     },
     _count: { taskId: true },
   });
-  const countMap = Object.fromEntries(completionCounts.map((c) => [c.userId, c._count.taskId]));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const countMap = Object.fromEntries(completionCounts.map((c: any) => [c.userId, c._count?.taskId ?? 0]));
 
   const result = leaderboard.map((entry, i) => ({
     rank: i + 1,
-    address: entry.user.address,
-    username: entry.user.username,
+    address: entry.user?.address,
+    username: entry.user?.username,
     points: entry.pointsEarned,
     tasksCompleted: countMap[entry.userId] ?? 0,
   }));
@@ -381,7 +384,7 @@ export async function getLeaderboard(req: Request, res: Response) {
 
 // GET /api/quests/:id/progress  (auth required)
 export async function getUserProgress(req: AuthRequest, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
 
   const progress = await prisma.questProgress.findUnique({
     where: { userId_questId: { userId: req.user!.id, questId: id } },
@@ -405,7 +408,8 @@ const verifyTaskSchema = z.object({
 
 // POST /api/quests/:id/tasks/:taskId/verify  (auth required)
 export async function verifyTask(req: AuthRequest, res: Response) {
-  const { id: questId, taskId } = req.params;
+  const questId = String(req.params.id);
+  const taskId = String(req.params.taskId);
   const { answer, txHash, chainId = 1, twitterUserId, discordUserId } = verifyTaskSchema.parse(req.body);
 
   // Check already completed

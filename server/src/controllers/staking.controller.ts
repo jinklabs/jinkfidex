@@ -115,7 +115,7 @@ export async function myStakingSubmissions(req: AuthRequest, res: Response) {
 
 // POST /api/staking/submissions/:id/approve
 export async function approveStakingSubmission(req: AuthRequest, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
   const { adminNote } = reviewSchema.parse(req.body);
 
   const sub = await prisma.stakingSubmission.findUnique({ where: { id } });
@@ -132,7 +132,7 @@ export async function approveStakingSubmission(req: AuthRequest, res: Response) 
 
 // POST /api/staking/submissions/:id/reject
 export async function rejectStakingSubmission(req: AuthRequest, res: Response) {
-  const { id } = req.params;
+  const id = String(req.params.id);
   const { adminNote } = reviewSchema.parse(req.body);
 
   const sub = await prisma.stakingSubmission.findUnique({ where: { id } });

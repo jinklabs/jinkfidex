@@ -9,7 +9,7 @@ import { z } from "zod";
 
 // GET /api/auth/nonce/:address
 export async function getNonce(req: Request, res: Response) {
-  const address = req.params.address.toLowerCase();
+  const address = String(req.params.address).toLowerCase();
 
   let user = await prisma.user.findUnique({ where: { address } });
   if (!user) {

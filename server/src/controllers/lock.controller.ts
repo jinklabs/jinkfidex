@@ -43,7 +43,7 @@ export async function listLocks(req: Request, res: Response) {
 
 // GET /api/locks/:id
 export async function getLock(req: Request, res: Response) {
-  const lock = await prisma.lock.findUnique({ where: { id: req.params.id } });
+  const lock = await prisma.lock.findUnique({ where: { id: String(req.params.id) } });
   if (!lock) throw new AppError(404, "Lock not found");
   res.json(lock);
 }
@@ -81,14 +81,15 @@ export async function createLock(req: AuthRequest, res: Response) {
 
 // PATCH /api/locks/:id/withdraw  (auth required)
 export async function markWithdrawn(req: AuthRequest, res: Response) {
-  const lock = await prisma.lock.findUnique({ where: { id: req.params.id } });
+  const id = String(req.params.id);
+  const lock = await prisma.lock.findUnique({ where: { id } });
   if (!lock) throw new AppError(404, "Lock not found");
   if (lock.owner !== req.user!.address) throw new AppError(403, "Not the lock owner");
   if (lock.withdrawn) throw new AppError(409, "Already withdrawn");
   if (new Date() < lock.unlockDate) throw new AppError(400, "Lock has not expired yet");
 
   const updated = await prisma.lock.update({
-    where: { id: req.params.id },
+    where: { id },
     data: { withdrawn: true, withdrawnAt: new Date() },
   });
 

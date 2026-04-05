@@ -142,28 +142,6 @@ function useActivity(address?: string, chainId?: number) {
 const TABS = ["Portfolio", "Positions", "Activity"] as const;
 type Tab = typeof TABS[number];
 
-// ── Sparkline SVG ────────────────────────────────────────────────────────────
-
-function Sparkline({ data, color = "var(--accent)", height = 48 }: { data: number[]; color?: string; height?: number }) {
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const range = max - min || 1;
-  const w = 200, h = height;
-  const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
-  return (
-    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height, display: "block" }} preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="spkGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.25" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" />
-      <path d={`M0,${h} L${pts} L${w},${h} Z`} fill="url(#spkGrad)" />
-    </svg>
-  );
-}
-
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ProfilePage() {
@@ -212,9 +190,6 @@ export default function ProfilePage() {
 
   // Activity
   const { txs, loading: activityLoading } = useActivity(address, chainId);
-
-  // Sparkline — simulated 30-day portfolio curve
-  const sparkData = [82, 79, 85, 91, 88, 94, 90, 87, 92, 98, 95, 102, 99, 108, 104, 110, 107, 115, 112, 118, 114, 122, 119, 125, 121, 128, 124, 131, 127, 134];
 
   const copyAddr = () => {
     if (!address) return;

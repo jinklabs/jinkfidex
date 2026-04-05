@@ -335,7 +335,8 @@ export default function BridgePage() {
       createConfig({
         integrator: "jinkfi",
         apiKey: import.meta.env.VITE_LIFI_API_KEY,
-        providers: [EVM({ getWalletClient: async () => walletClient as Parameters<typeof EVM>[0]["getWalletClient"] extends () => Promise<infer T> ? T : never })],
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        providers: [EVM({ getWalletClient: async () => walletClient as any })],
       });
       const result = await executeRoute(bestRoute, {
         updateRouteHook(updatedRoute) {

@@ -9,69 +9,6 @@ import { createChart, LineSeries, ColorType } from "lightweight-charts";
 import { useFeed } from "../context/PriceFeedContext";
 import { useUniswapPools } from "../hooks/useUniswapPools";
 
-// ── Sparkline using lightweight-charts ────────────────────────────────────────
-
-interface SparkProps { symbol: string; color: string; height?: number }
-
-function Sparkline({ symbol, color, height = 56 }: SparkProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const chartRef = useRef<ReturnType<typeof createChart> | null>(null);
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const chart = createChart(containerRef.current, {
-      width:  containerRef.current.clientWidth,
-      height,
-      layout: {
-        background: { type: ColorType.Solid, color: "transparent" },
-        textColor:  "transparent",
-      },
-      grid:        { vertLines: { visible: false }, horzLines: { visible: false } },
-      crosshair:   { vertLine: { visible: false }, horzLine: { visible: false } },
-      rightPriceScale: { visible: false },
-      timeScale:       { visible: false },
-      handleScroll:    false,
-      handleScale:     false,
-    });
-
-    const series = chart.addSeries(LineSeries, {
-      color,
-      lineWidth: 2,
-      lastValueVisible: false,
-      priceLineVisible: false,
-    });
-
-    // Generate synthetic 30-day price data anchored to realistic base
-    const bases: Record<string, number> = {
-      BTCUSDT: 67000, ETHUSDT: 3500, SOLUSDT: 165,
-      BNBUSDT: 580,   LINKUSDT: 18,
-    };
-    const base = bases[symbol] ?? 100;
-    const now  = Math.floor(Date.now() / 1000);
-    const DAY  = 86400;
-    const data = Array.from({ length: 30 }, (_, i) => {
-      const noise = (Math.sin(i * 1.3 + symbol.charCodeAt(0)) + Math.cos(i * 0.7)) * 0.04;
-      const trend = (i / 29) * 0.1 - 0.05;
-      return {
-        time:  (now - (29 - i) * DAY) as unknown as import("lightweight-charts").UTCTimestamp,
-        value: base * (1 + trend + noise),
-      };
-    });
-    series.setData(data);
-    chart.timeScale().fitContent();
-    chartRef.current = chart;
-
-    const ro = new ResizeObserver(() => {
-      if (containerRef.current) chart.resize(containerRef.current.clientWidth, height);
-    });
-    ro.observe(containerRef.current);
-    return () => { ro.disconnect(); chart.remove(); };
-  }, [symbol, color, height]);
-
-  return <div ref={containerRef} style={{ width: "100%", height }} />;
-}
-
 // ── Animated counter ──────────────────────────────────────────────────────────
 
 function AnimatedStat({ value, label, prefix = "", suffix = "" }: {

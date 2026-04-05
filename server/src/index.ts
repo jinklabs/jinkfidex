@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import rateLimit from "express-rate-limit";
 import { env } from "./config/env";
 import { connectDB, disconnectDB } from "./config/db";
 import { connectRedis } from "./config/redis";
@@ -20,6 +21,27 @@ app.use(cors({
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(env.isDev ? "dev" : "combined"));
+
+// ── Rate limiting ─────────────────────────────────────────────────────────────
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many requests, please try again later" },
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many auth attempts, please try again later" },
+});
+
+app.use("/api", apiLimiter);
+app.use("/api/auth/nonce", authLimiter);
+app.use("/api/auth/verify", authLimiter);
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 app.use("/api", routes);

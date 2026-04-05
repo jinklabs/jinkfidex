@@ -3,12 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Coins, TrendingUp, Lock, Gift, Info, Layers } from "lucide-react";
 import { stakingApi, type StakingSubmission } from "../api/client";
 
-function fmtUSD(n: number) {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
-  if (n >= 1_000) return `$${(n / 1_000).toFixed(1)}K`;
-  return `$${n.toFixed(2)}`;
-}
-
 export default function StakingPage() {
   const [amounts, setAmounts] = useState<Record<string, string>>({});
 
@@ -21,7 +15,6 @@ export default function StakingPage() {
 
   const pools = submissions ?? [];
 
-  const totalTVL = 0; // no on-chain TVL read yet
   const avgApy   = pools.length
     ? pools.reduce((s, p) => s + p.apy, 0) / pools.length
     : 0;

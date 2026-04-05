@@ -26,7 +26,7 @@ export function useFarm(farm: FarmInfo) {
     address: addrs.farm,
     abi: FARM_ABI,
     functionName: "pendingReward",
-    args: address ? [BigInt(farm.pid)] : undefined,
+    args: address ? [BigInt(farm.pid), address] : undefined,
     query: { enabled: !!address, refetchInterval: 10_000 },
   });
 

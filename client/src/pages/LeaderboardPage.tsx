@@ -7,12 +7,6 @@ import { useQuests } from "../hooks/useQuest";
 const PERIODS = ["24H", "7D", "30D", "All Time"] as const;
 type Period = typeof PERIODS[number];
 
-function fmtUSD(n: number) {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
-  if (n >= 1_000) return `$${(n / 1_000).toFixed(1)}K`;
-  return `$${n.toFixed(2)}`;
-}
-
 function shortAddr(addr: string) {
   return addr.length > 12 ? `${addr.slice(0, 6)}…${addr.slice(-4)}` : addr;
 }

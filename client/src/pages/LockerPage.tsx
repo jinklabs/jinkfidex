@@ -523,7 +523,7 @@ function MyLockCard({ lock, onManage }: { lock: LockType; onManage: (l: LockType
 
 // ── Create lock drawer (slides in from right) ─────────────────────────────────
 
-function CreateLockDrawer({ mode, onModeChange, onClose, address, isConnected, onCreated, onCreateLock }: {
+function CreateLockDrawer({ mode, onModeChange, onClose, address: _address, isConnected, onCreated, onCreateLock }: {
   mode: LockMode; onModeChange: (m: LockMode) => void;
   onClose: () => void; address?: string; isConnected: boolean;
   onCreated: () => void;
