@@ -277,7 +277,7 @@ export default function Sidebar({ isMobile, isOpen, onClose, isCollapsed, onTogg
           {!collapsed && (
             <>
               {[
-                { href: "https://docs.jinkfi.io",      label: "Docs",     Icon: ExternalLink },
+                { href: "https://docs.jinkfi.xyz/",      label: "Docs",     Icon: ExternalLink },
                 { href: "https://twitter.com/jinkfi",  label: "Follow X", Icon: ExternalLink },
               ].map(({ href, label, Icon }) => (
                 <a key={href} href={href} target="_blank" rel="noreferrer"
@@ -301,7 +301,7 @@ export default function Sidebar({ isMobile, isOpen, onClose, isCollapsed, onTogg
 
           {collapsed && (
             <>
-              <a href="https://docs.jinkfi.io" target="_blank" rel="noreferrer" title="Docs"
+              <a href="https://docs.jinkfi.xyz/" target="_blank" rel="noreferrer" title="Docs"
                 style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.6rem 0", color: "var(--text-muted)", transition: "color 0.12s" }}
                 onMouseEnter={e => { e.currentTarget.style.color = "var(--text)"; }}
                 onMouseLeave={e => { e.currentTarget.style.color = "var(--text-muted)"; }}

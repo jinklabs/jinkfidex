@@ -74,7 +74,7 @@ export default function LandingPage() {
           style={{ width: 90, height: "auto", filter: "brightness(1.1) drop-shadow(0 0 6px rgba(212,175,55,0.3))", mixBlendMode: "lighten" }}
         />
         <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-          <a href="https://docs.jinkfi.io" target="_blank" rel="noreferrer"
+          <a href="https://docs.jinkfi.xyz/" target="_blank" rel="noreferrer"
             style={{ fontSize: 13, color: "var(--text-muted)", textDecoration: "none", padding: "0 0.5rem" }}
           >Docs</a>
           <a href="https://x.com/JinkFi" target="_blank" rel="noreferrer"
@@ -183,7 +183,7 @@ export default function LandingPage() {
           >
             Launch App <ChevronRight size={15} />
           </Link>
-          <a href="https://docs.jinkfi.io" target="_blank" rel="noreferrer" style={{
+          <a href="https://docs.jinkfi.xyz/" target="_blank" rel="noreferrer" style={{
             display: "inline-flex", alignItems: "center", gap: "0.4rem",
             padding: "0.75rem 1.75rem",
             background: "transparent", color: "var(--text)",
@@ -404,7 +404,7 @@ export default function LandingPage() {
         </div>
         <div style={{ display: "flex", gap: "1.25rem" }}>
           {[
-            { href: "https://docs.jinkfi.io",     label: "Docs"    },
+            { href: "https://docs.jinkfi.xyz/",     label: "Docs"    },
             { href: "https://x.com/JinkFi",        label: "Twitter" },
             { href: "https://jink.fun",             label: "Launchpad" },
           ].map(l => (
