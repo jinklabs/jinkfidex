@@ -8,7 +8,7 @@ import { QUOTER_V2_ABI, SWAP_ROUTER_V3_ABI, UNISWAP_ADDRESSES, type V3FeeTier } 
 export function useSwapV3() {
   const { address } = useAccount();
   const chainId = useChainId();
-  const addrs = UNISWAP_ADDRESSES[chainId] ?? UNISWAP_ADDRESSES[1];
+  const addrs = UNISWAP_ADDRESSES[chainId];
 
   const [tokenIn, setTokenIn] = useState<Token | null>(null);
   const [tokenOut, setTokenOut] = useState<Token | null>(null);
@@ -24,8 +24,8 @@ export function useSwapV3() {
   const isEthIn = tokenIn?.address === ETH_ADDRESS;
 
   // Resolve WETH for ETH
-  const resolvedIn = isEthIn ? addrs.weth : (tokenIn?.address as `0x${string}` | undefined);
-  const resolvedOut = tokenOut?.address === ETH_ADDRESS ? addrs.weth : (tokenOut?.address as `0x${string}` | undefined);
+  const resolvedIn = isEthIn ? addrs?.weth : (tokenIn?.address as `0x${string}` | undefined);
+  const resolvedOut = tokenOut?.address === ETH_ADDRESS ? addrs?.weth : (tokenOut?.address as `0x${string}` | undefined);
 
   const parsedIn = tokenIn && amountIn
     ? (() => { try { return parseUnits(amountIn, tokenIn.decimals); } catch { return 0n; } })()
@@ -33,7 +33,7 @@ export function useSwapV3() {
 
   // QuoterV2 call (read-only simulation)
   const { data: quoteData } = useReadContract({
-    address: addrs.v3QuoterV2,
+    address: addrs?.v3QuoterV2,
     abi: QUOTER_V2_ABI,
     functionName: "quoteExactInputSingle",
     args: resolvedIn && resolvedOut && parsedIn > 0n ? [{
@@ -43,7 +43,7 @@ export function useSwapV3() {
       fee,
       sqrtPriceLimitX96: 0n,
     }] : undefined,
-    query: { enabled: !!resolvedIn && !!resolvedOut && parsedIn > 0n, refetchInterval: 15000 },
+    query: { enabled: !!addrs && !!resolvedIn && !!resolvedOut && parsedIn > 0n, refetchInterval: 15000 },
   });
 
   // Allowance
@@ -51,8 +51,8 @@ export function useSwapV3() {
     address: tokenIn?.address as `0x${string}`,
     abi: ERC20_ABI,
     functionName: "allowance",
-    args: address ? [address, addrs.v3Router] : undefined,
-    query: { enabled: !isEthIn && !!address && !!tokenIn },
+    args: address ? [address, addrs?.v3Router as `0x${string}`] : undefined,
+    query: { enabled: !!addrs && !isEthIn && !!address && !!tokenIn },
   });
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export function useSwapV3() {
   const { isLoading: isTxPending } = useWaitForTransactionReceipt({ hash: txHash ?? undefined });
 
   const approve = useCallback(async () => {
-    if (!tokenIn) return;
+    if (!tokenIn || !addrs) return;
     try {
       const hash = await writeContractAsync({
         address: tokenIn.address as `0x${string}`,
@@ -80,10 +80,10 @@ export function useSwapV3() {
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Approval failed");
     }
-  }, [tokenIn, addrs.v3Router, writeContractAsync, refetchAllowance]);
+  }, [tokenIn, addrs, writeContractAsync, refetchAllowance]);
 
   const swap = useCallback(async () => {
-    if (!tokenIn || !tokenOut || !address || !quoteData || !resolvedIn || !resolvedOut) return;
+    if (!tokenIn || !tokenOut || !address || !quoteData || !resolvedIn || !resolvedOut || !addrs) return;
     setIsSwapping(true);
     setError(null);
     try {
@@ -91,7 +91,7 @@ export function useSwapV3() {
       const amountOutMin = (outAmount * BigInt(Math.floor((1 - slippage / 100) * 10000))) / 10000n;
 
       const hash = await writeContractAsync({
-        address: addrs.v3Router,
+        address: addrs!.v3Router,
         abi: SWAP_ROUTER_V3_ABI,
         functionName: "exactInputSingle",
         args: [{

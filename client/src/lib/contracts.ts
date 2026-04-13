@@ -282,15 +282,6 @@ export const CONTRACT_ADDRESSES: Record<number, {
   quoterV2?: `0x${string}`;
   weth9?: `0x${string}`;
 }> = {
-  1: { // Ethereum Mainnet
-    router:        "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
-    factory:       "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
-    v3Factory:     "0x1F98431c8aD98523631AE4a59f267346ea31F984",
-    nonfungiblePositionManager: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
-    v3SwapRouter:  "0xE592427A0AEce92De3Edee1F18E0157C05861564",
-    quoterV2:      "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
-    weth9:         "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-  },
   11155111: { // Sepolia — JinkFi deployment
     router:                     "0x01faa5159FC0d9103efC0E8274fBD36D4f2e12DE",
     factory:                    "0x4Ad76DCe86BecEBC48Aba2f4dD0F685D6C3B7430",
@@ -301,15 +292,6 @@ export const CONTRACT_ADDRESSES: Record<number, {
     v3SwapRouter:               "0x0e2B6BE041806391534B18AD2AE1548d8AA088C4",
     universalRouter:            "0xA1E608E29016430a486A88a2Da719DDdBdA054bC",
     quoterV2:                   "0xa4E0c4Fc04B3786bE5687B70Be9c5abEEae2d51f",
-  },
-  8453: { // Base
-    router:        "0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24",
-    factory:       "0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6",
-    v3Factory:     "0x33128a8fC17869897dcE68Ed026d694621f6FDfD",
-    nonfungiblePositionManager: "0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1",
-    v3SwapRouter:  "0x2626664c2603336E57B271c5C0b26F421741e481",
-    quoterV2:      "0x3d4e44Eb1374240CE5F1B136cf395a8eAe6D2De9",
-    weth9:         "0x4200000000000000000000000000000000000006",
   },
   4217: { // Tempo Mainnet — JinkFi deployment 2026-04-04
     router:                     "0xd74136ec9100303861B08b809fEAbC333611dA66",

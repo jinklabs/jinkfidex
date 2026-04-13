@@ -12,9 +12,9 @@ import {
 export function useV3Position() {
   const { address } = useAccount();
   const chainId = useChainId();
-  const uniAddrs = UNISWAP_ADDRESSES[chainId] ?? UNISWAP_ADDRESSES[1];
-  const v3Factory = V3_FACTORY_ADDRESSES[chainId] ?? V3_FACTORY_ADDRESSES[1];
-  const pmAddr = uniAddrs.v3PositionManager;
+  const uniAddrs = UNISWAP_ADDRESSES[chainId];
+  const v3Factory = V3_FACTORY_ADDRESSES[chainId];
+  const pmAddr = uniAddrs?.v3PositionManager;
 
   const [tokenA, setTokenA] = useState<Token | null>(null);
   const [tokenB, setTokenB] = useState<Token | null>(null);
@@ -42,7 +42,7 @@ export function useV3Position() {
     args: token0 && token1
       ? [token0.address as `0x${string}`, token1.address as `0x${string}`, fee]
       : undefined,
-    query: { enabled: !!token0 && !!token1 },
+    query: { enabled: !!v3Factory && !!token0 && !!token1 },
   });
 
   const poolExists =
@@ -78,35 +78,35 @@ export function useV3Position() {
     address: token0?.address as `0x${string}`,
     abi: ERC20_ABI,
     functionName: "allowance",
-    args: address ? [address, pmAddr] : undefined,
-    query: { enabled: !isEth0 && !!token0 && !!address },
+    args: address ? [address, pmAddr as `0x${string}`] : undefined,
+    query: { enabled: !!pmAddr && !isEth0 && !!token0 && !!address },
   });
 
   const { data: allowance1, refetch: refetch1 } = useReadContract({
     address: token1?.address as `0x${string}`,
     abi: ERC20_ABI,
     functionName: "allowance",
-    args: address ? [address, pmAddr] : undefined,
-    query: { enabled: !isEth1 && !!token1 && !!address },
+    args: address ? [address, pmAddr as `0x${string}`] : undefined,
+    query: { enabled: !!pmAddr && !isEth1 && !!token1 && !!address },
   });
 
   const needsApprove0 = !isEth0 && !!allowance0 && parsed0 > 0n && (allowance0 as bigint) < parsed0;
   const needsApprove1 = !isEth1 && !!allowance1 && parsed1 > 0n && (allowance1 as bigint) < parsed1;
 
   const approve0 = useCallback(async () => {
-    if (!token0) return;
-    await writeContractAsync({ address: token0.address as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [pmAddr, maxUint256] });
+    if (!token0 || !pmAddr) return;
+    await writeContractAsync({ address: token0.address as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [pmAddr as `0x${string}`, maxUint256] });
     refetch0();
   }, [token0, pmAddr, writeContractAsync, refetch0]);
 
   const approve1 = useCallback(async () => {
-    if (!token1) return;
-    await writeContractAsync({ address: token1.address as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [pmAddr, maxUint256] });
+    if (!token1 || !pmAddr) return;
+    await writeContractAsync({ address: token1.address as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [pmAddr as `0x${string}`, maxUint256] });
     refetch1();
   }, [token1, pmAddr, writeContractAsync, refetch1]);
 
   const mint = useCallback(async () => {
-    if (!token0 || !token1 || !address || !minPrice || !maxPrice || !amount0Str || !amount1Str) return;
+    if (!token0 || !token1 || !address || !minPrice || !maxPrice || !amount0Str || !amount1Str || !pmAddr) return;
     setIsPending(true);
     setError(null);
     try {
@@ -123,7 +123,7 @@ export function useV3Position() {
       const deadline = BigInt(Math.floor(Date.now() / 1000) + 1200);
 
       const hash = await writeContractAsync({
-        address: pmAddr,
+        address: pmAddr as `0x${string}`,
         abi: NONFUNGIBLE_POSITION_MANAGER_ABI,
         functionName: "mint",
         args: [{

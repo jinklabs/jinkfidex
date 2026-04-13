@@ -116,9 +116,9 @@ function encodeMintLiquidities(params: {
 export function useV4Position() {
   const { address } = useAccount();
   const chainId = useChainId();
-  const uniAddrs = UNISWAP_ADDRESSES[chainId] ?? UNISWAP_ADDRESSES[1];
-  const pmAddr = uniAddrs.v4PositionManager as `0x${string}`;
-  const poolManagerAddr = uniAddrs.v4PoolManager as `0x${string}`;
+  const uniAddrs = UNISWAP_ADDRESSES[chainId];
+  const pmAddr = uniAddrs?.v4PositionManager as `0x${string}` | undefined;
+  const poolManagerAddr = uniAddrs?.v4PoolManager as `0x${string}` | undefined;
 
   const [tokenA, setTokenA] = useState<Token | null>(null);
   const [tokenB, setTokenB] = useState<Token | null>(null);
@@ -157,7 +157,7 @@ export function useV4Position() {
     abi: POOL_MANAGER_ABI,
     functionName: "getSlot0",
     args: poolKey ? [poolKey] : undefined,
-    query: { enabled: !!poolKey },
+    query: { enabled: !!poolManagerAddr && !!poolKey },
   });
 
   const poolExists = !!slot0 && (slot0 as unknown as [bigint, number])[0] > 0n;
@@ -181,35 +181,35 @@ export function useV4Position() {
     address: token0?.address as `0x${string}`,
     abi: ERC20_ABI,
     functionName: "allowance",
-    args: address ? [address, pmAddr] : undefined,
-    query: { enabled: !isNative0 && !!token0 && !!address },
+    args: address ? [address, pmAddr as `0x${string}`] : undefined,
+    query: { enabled: !!pmAddr && !isNative0 && !!token0 && !!address },
   });
 
   const { data: allowance1, refetch: refetch1 } = useReadContract({
     address: token1?.address as `0x${string}`,
     abi: ERC20_ABI,
     functionName: "allowance",
-    args: address ? [address, pmAddr] : undefined,
-    query: { enabled: !isNative1 && !!token1 && !!address },
+    args: address ? [address, pmAddr as `0x${string}`] : undefined,
+    query: { enabled: !!pmAddr && !isNative1 && !!token1 && !!address },
   });
 
   const needsApprove0 = !isNative0 && !!allowance0 && parsed0 > 0n && (allowance0 as bigint) < parsed0;
   const needsApprove1 = !isNative1 && !!allowance1 && parsed1 > 0n && (allowance1 as bigint) < parsed1;
 
   const approve0 = useCallback(async () => {
-    if (!token0) return;
-    await writeContractAsync({ address: token0.address as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [pmAddr, maxUint256] });
+    if (!token0 || !pmAddr) return;
+    await writeContractAsync({ address: token0.address as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [pmAddr as `0x${string}`, maxUint256] });
     refetch0();
   }, [token0, pmAddr, writeContractAsync, refetch0]);
 
   const approve1 = useCallback(async () => {
-    if (!token1) return;
-    await writeContractAsync({ address: token1.address as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [pmAddr, maxUint256] });
+    if (!token1 || !pmAddr) return;
+    await writeContractAsync({ address: token1.address as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [pmAddr as `0x${string}`, maxUint256] });
     refetch1();
   }, [token1, pmAddr, writeContractAsync, refetch1]);
 
   const mint = useCallback(async () => {
-    if (!token0 || !token1 || !address || !currency0 || !currency1 || !minPrice || !maxPrice) return;
+    if (!token0 || !token1 || !address || !currency0 || !currency1 || !minPrice || !maxPrice || !pmAddr) return;
     setIsPending(true);
     setError(null);
     try {
@@ -246,7 +246,7 @@ export function useV4Position() {
       const ethValue = isNative0 ? amount0Max : isNative1 ? amount1Max : 0n;
 
       const hash = await writeContractAsync({
-        address: pmAddr,
+        address: pmAddr as `0x${string}`,
         abi: V4_POSITION_MANAGER_ABI,
         functionName: "modifyLiquidities",
         args: [unlockData, deadline],
@@ -267,14 +267,14 @@ export function useV4Position() {
   ]);
 
   const initializePool = useCallback(async (initialPrice: number) => {
-    if (!token0 || !token1 || !currency0 || !currency1) return;
+    if (!token0 || !token1 || !currency0 || !currency1 || !pmAddr) return;
     setIsPending(true);
     setError(null);
     try {
       const tick = priceToTick(initialPrice, token0.decimals, token1.decimals);
       const sqrtPriceX96 = sqrtPriceX96FromTick(tick);
       const hash = await writeContractAsync({
-        address: pmAddr,
+        address: pmAddr as `0x${string}`,
         abi: V4_POSITION_MANAGER_ABI,
         functionName: "initializePool",
         args: [

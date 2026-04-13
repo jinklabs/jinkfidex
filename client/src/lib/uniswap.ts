@@ -82,10 +82,8 @@ export const V3_FACTORY_ABI = [
 ] as const;
 
 export const V3_FACTORY_ADDRESSES: Record<number, `0x${string}`> = {
-  1:        "0x1F98431c8aD98523631AE4a59f267346ea31F984",
   11155111: "0xD156649d5B844d9a72cF157c645c9aB0E016ccaf",
-  8453:     "0x33128a8fC17869897dcE68Ed026d694621f6FDfD",
-  42161:    "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+  4217:     "0x28b25620F0956f509Bd0E07ED9D9Ad53725D2752",
 };
 
 // ── Uniswap V4 ────────────────────────────────────────────────────────────────
@@ -159,28 +157,6 @@ export const UNISWAP_ADDRESSES: Record<number, {
   universalRouter: `0x${string}`;
   weth: `0x${string}`;
 }> = {
-  1: {
-    v2Router:          "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
-    v2Factory:         "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
-    v3Router:          "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
-    v3QuoterV2:        "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
-    v3PositionManager: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
-    v4PoolManager:     "0x000000000004444c5dc75cB358380D2e3dE08A90",
-    v4PositionManager: "0xbD216513d74C8cf14CF4747E6AaA6420FF7E55d6",
-    universalRouter:   "0x66a9893cC07D91D95644AEDD05D03f95e1dBA8AF",
-    weth:              "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-  },
-  8453: { // Base
-    v2Router:          "0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24",
-    v2Factory:         "0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6",
-    v3Router:          "0x2626664c2603336E57B271c5C0b26F421741e481",
-    v3QuoterV2:        "0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a",
-    v3PositionManager: "0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1",
-    v4PoolManager:     "0x498581fF718922c3f8e6A244956aF099B2652b2b",
-    v4PositionManager: "0x7C5f5A4bBd8fD63184577525326123B519429bDc",
-    universalRouter:   "0x6fF5693b99212Da76ad316178A184AB56D299b43",
-    weth:              "0x4200000000000000000000000000000000000006",
-  },
   11155111: { // Sepolia — JinkFi deployment
     v2Router:          "0x01faa5159FC0d9103efC0E8274fBD36D4f2e12DE",
     v2Factory:         "0x4Ad76DCe86BecEBC48Aba2f4dD0F685D6C3B7430",
@@ -192,16 +168,16 @@ export const UNISWAP_ADDRESSES: Record<number, {
     universalRouter:   "0xA1E608E29016430a486A88a2Da719DDdBdA054bC",
     weth:              "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14",
   },
-  42161: { // Arbitrum
-    v2Router:          "0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24",
-    v2Factory:         "0xf1D7CC64Fb4452F05c498126312eBE29f30Fbcf9",
-    v3Router:          "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
-    v3QuoterV2:        "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
-    v3PositionManager: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
-    v4PoolManager:     "0x360E68faCcca8cA495c1B759Fd9EEe4100240312",
-    v4PositionManager: "0xd88F38F930b7952f2DB2432Cb002E7abbF2B4534",
-    universalRouter:   "0xa51afaFe0263b40EdaEf0Bc6b37Ec176bae9b07A",
-    weth:              "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+  4217: { // Tempo Mainnet — JinkFi deployment 2026-04-04
+    v2Router:          "0xd74136ec9100303861B08b809fEAbC333611dA66",
+    v2Factory:         "0xd8db8b03281ee11DF78944772778843C54814913",
+    v3Router:          "0xCdBF78b0c7e4428093Fe60973E9379D5BcFe1BBB",
+    v3QuoterV2:        "0x1EB1AF14374F61B30b2D96841c6F48d473aa1b8c",
+    v3PositionManager: "0x6535b354cEAD3739a6403D84E679F6d537039052",
+    v4PoolManager:     "0x0000000000000000000000000000000000000000",
+    v4PositionManager: "0x0000000000000000000000000000000000000000",
+    universalRouter:   "0x7482240897747fE08E0aAf80A8C83081B6cce67A",
+    weth:              "0xE657646165f00907e8cBcFE5aDB8A6F5cdc5f454",
   },
 };
 

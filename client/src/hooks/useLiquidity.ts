@@ -7,7 +7,7 @@ import { ROUTER_ABI, ERC20_ABI, PAIR_ABI, FACTORY_ABI, CONTRACT_ADDRESSES } from
 export function useAddLiquidity() {
   const { address } = useAccount();
   const chainId = useChainId();
-  const addrs = CONTRACT_ADDRESSES[chainId] ?? CONTRACT_ADDRESSES[1];
+  const addrs = CONTRACT_ADDRESSES[chainId];
 
   const [tokenA, setTokenA] = useState<Token | null>(null);
   const [tokenB, setTokenB] = useState<Token | null>(null);
@@ -23,11 +23,11 @@ export function useAddLiquidity() {
 
   // Get pair address
   const { data: pairAddress } = useReadContract({
-    address: addrs.factory,
+    address: addrs?.factory,
     abi: FACTORY_ABI,
     functionName: "getPair",
     args: tokenA && tokenB ? [tokenA.address as `0x${string}`, tokenB.address as `0x${string}`] : undefined,
-    query: { enabled: !!tokenA && !!tokenB },
+    query: { enabled: !!addrs && !!tokenA && !!tokenB },
   });
 
   // Get reserves for auto-fill
@@ -43,16 +43,16 @@ export function useAddLiquidity() {
     address: tokenA?.address as `0x${string}`,
     abi: ERC20_ABI,
     functionName: "allowance",
-    args: address ? [address, addrs.router] : undefined,
-    query: { enabled: !isEthA && !!tokenA && !!address },
+    args: address ? [address, addrs?.router as `0x${string}`] : undefined,
+    query: { enabled: !!addrs && !isEthA && !!tokenA && !!address },
   });
 
   const { data: allowanceB, refetch: refetchB } = useReadContract({
     address: tokenB?.address as `0x${string}`,
     abi: ERC20_ABI,
     functionName: "allowance",
-    args: address ? [address, addrs.router] : undefined,
-    query: { enabled: !isEthB && !!tokenB && !!address },
+    args: address ? [address, addrs?.router as `0x${string}`] : undefined,
+    query: { enabled: !!addrs && !isEthB && !!tokenB && !!address },
   });
 
   const { writeContractAsync } = useWriteContract();
@@ -64,19 +64,19 @@ export function useAddLiquidity() {
   const needsApproveB = !isEthB && !!allowanceB && parsedB > 0n && (allowanceB as bigint) < parsedB;
 
   const approveA = useCallback(async () => {
-    if (!tokenA) return;
+    if (!tokenA || !addrs) return;
     await writeContractAsync({ address: tokenA.address as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [addrs.router, maxUint256] });
     refetchA();
-  }, [tokenA, addrs.router, writeContractAsync, refetchA]);
+  }, [tokenA, addrs, writeContractAsync, refetchA]);
 
   const approveB = useCallback(async () => {
-    if (!tokenB) return;
+    if (!tokenB || !addrs) return;
     await writeContractAsync({ address: tokenB.address as `0x${string}`, abi: ERC20_ABI, functionName: "approve", args: [addrs.router, maxUint256] });
     refetchB();
-  }, [tokenB, addrs.router, writeContractAsync, refetchB]);
+  }, [tokenB, addrs, writeContractAsync, refetchB]);
 
   const addLiquidity = useCallback(async () => {
-    if (!tokenA || !tokenB || !address) return;
+    if (!tokenA || !tokenB || !address || !addrs) return;
     setIsPending(true);
     setError(null);
     try {
@@ -120,7 +120,7 @@ export function useAddLiquidity() {
 export function useRemoveLiquidity(pairAddress: `0x${string}` | undefined, tokenA: Token | null, tokenB: Token | null) {
   const { address } = useAccount();
   const chainId = useChainId();
-  const addrs = CONTRACT_ADDRESSES[chainId] ?? CONTRACT_ADDRESSES[1];
+  const addrs = CONTRACT_ADDRESSES[chainId];
   const { writeContractAsync } = useWriteContract();
 
   const [percent, setPercent] = useState(50);
@@ -140,21 +140,21 @@ export function useRemoveLiquidity(pairAddress: `0x${string}` | undefined, token
     address: pairAddress,
     abi: PAIR_ABI,
     functionName: "allowance",
-    args: address ? [address, addrs.router] : undefined,
-    query: { enabled: !!pairAddress && !!address },
+    args: address ? [address, addrs?.router as `0x${string}`] : undefined,
+    query: { enabled: !!addrs && !!pairAddress && !!address },
   });
 
   const removeAmount = lpBalance ? ((lpBalance as bigint) * BigInt(percent)) / 100n : 0n;
   const needsApprove = !!lpAllowance && removeAmount > 0n && (lpAllowance as bigint) < removeAmount;
 
   const approve = useCallback(async () => {
-    if (!pairAddress) return;
+    if (!pairAddress || !addrs) return;
     await writeContractAsync({ address: pairAddress, abi: PAIR_ABI, functionName: "approve", args: [addrs.router, maxUint256] });
     refetchAllowance();
-  }, [pairAddress, addrs.router, writeContractAsync, refetchAllowance]);
+  }, [pairAddress, addrs, writeContractAsync, refetchAllowance]);
 
   const removeLiquidity = useCallback(async () => {
-    if (!tokenA || !tokenB || !address || !pairAddress) return;
+    if (!tokenA || !tokenB || !address || !pairAddress || !addrs) return;
     setIsPending(true);
     setError(null);
     try {

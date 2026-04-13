@@ -111,7 +111,11 @@
       "Bash(grep -v \"node_modules\\\\|//.*mock\\\\|comment\")",
       "Bash(grep -rn \"hardcode\\\\|static.*data\\\\|\\\\[\\\\s*{.*chainId.*}\\\\s*\\\\]\\\\|const.*=.*\\\\[.*{\" 'C:/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex/client/src' --include=*.tsx --include=*.ts)",
       "Bash(grep -rn \"Math\\\\.random\\\\|Math\\\\.floor.*Math\\\\.random\\\\|\\\\[.*,.*.*\\\\]\\\\|dummyPool\\\\|testData\\\\|sampleData\\\\|fakeToken\" 'C:/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex/client/src' --include=*.tsx --include=*.ts)",
-      "Bash(node -e \"require\\(''''./dist/index.js''''\\)\")"
+      "Bash(node -e \"require\\(''''./dist/index.js''''\\)\")",
+      "Bash(xargs grep:*)",
+      "Bash(find 'C:\\\\Users\\\\avone\\\\OneDrive\\\\Desktop\\\\Jink Labs\\\\jinkfidex\\\\jinkfidex\\\\client\\\\src' -type f \\\\\\(-name *.ts -o -name *.tsx \\\\\\))",
+      "Bash(ls:*)",
+      "Bash(find '/c/Users/avone/OneDrive/Desktop/Jink Labs/jinkfidex/jinkfidex' -name *.md -not -path */node_modules/*)"
     ]
   }
 }

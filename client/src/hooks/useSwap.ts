@@ -21,7 +21,7 @@ export interface SwapState {
 export function useSwap() {
   const { address } = useAccount();
   const chainId = useChainId();
-  const addrs = CONTRACT_ADDRESSES[chainId] ?? CONTRACT_ADDRESSES[1];
+  const addrs = CONTRACT_ADDRESSES[chainId];
 
   const [state, setState] = useState<SwapState>({
     tokenIn: null, tokenOut: null, amountIn: "", amountOut: "",
@@ -41,11 +41,11 @@ export function useSwap() {
 
   // Get amounts out
   const { data: amountsOut } = useReadContract({
-    address: addrs.router,
+    address: addrs?.router,
     abi: ROUTER_ABI,
     functionName: "getAmountsOut",
     args: path && amountInParsed > 0n ? [amountInParsed, path] : undefined,
-    query: { enabled: !!path && amountInParsed > 0n, refetchInterval: 15000 },
+    query: { enabled: !!addrs && !!path && amountInParsed > 0n, refetchInterval: 15000 },
   });
 
   // Get allowance
@@ -53,8 +53,8 @@ export function useSwap() {
     address: state.tokenIn?.address as `0x${string}`,
     abi: ERC20_ABI,
     functionName: "allowance",
-    args: address ? [address, addrs.router] : undefined,
-    query: { enabled: !isEthIn && !!address && !!state.tokenIn },
+    args: address ? [address, addrs?.router as `0x${string}`] : undefined,
+    query: { enabled: !!addrs && !isEthIn && !!address && !!state.tokenIn },
   });
 
   // Update amountOut + needsApproval when data changes
@@ -69,7 +69,7 @@ export function useSwap() {
   const { isLoading: isTxPending } = useWaitForTransactionReceipt({ hash: state.txHash ?? undefined });
 
   const approve = useCallback(async () => {
-    if (!state.tokenIn || !address) return;
+    if (!state.tokenIn || !address || !addrs) return;
     setState(s => ({ ...s, isApproving: true, error: null }));
     try {
       const hash = await writeContractAsync({
@@ -87,7 +87,7 @@ export function useSwap() {
   }, [state.tokenIn, address, addrs.router, writeContractAsync, refetchAllowance]);
 
   const swap = useCallback(async () => {
-    if (!state.tokenIn || !state.tokenOut || !address || !path) return;
+    if (!state.tokenIn || !state.tokenOut || !address || !path || !addrs) return;
     setState(s => ({ ...s, isSwapping: true, error: null }));
     try {
       const deadline = BigInt(Math.floor(Date.now() / 1000) + 1200);
