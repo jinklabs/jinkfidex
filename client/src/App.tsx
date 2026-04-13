@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 
 function ScrollToTop() {
@@ -10,31 +10,32 @@ import Navbar from "./components/shared/Navbar";
 import Sidebar from "./components/shared/Sidebar";
 import BottomNav from "./components/shared/BottomNav";
 import BackgroundRays from "./components/shared/BackgroundRays";
-import SwapPage from "./pages/SwapPage";
-import PoolPage from "./pages/PoolPage";
-import FarmPage from "./pages/FarmPage";
-import LockerPage from "./pages/LockerPage";
-import QuestsPage from "./pages/QuestsPage";
-import QuestDetailPage from "./pages/QuestDetailPage";
-import PerpsPage from "./pages/PerpsPage";
-import StakingPage from "./pages/StakingPage";
-import LeaderboardPage from "./pages/LeaderboardPage";
-import BridgePage from "./pages/BridgePage";
-import ProfilePage from "./pages/ProfilePage";
-import CreateQuestPage from "./pages/CreateQuestPage";
-import AdminQuestsPage from "./pages/AdminQuestsPage";
-import AdminStakingPage from "./pages/AdminStakingPage";
-import AdminPerpsPage from "./pages/AdminPerpsPage";
-import AdminOverviewPage from "./pages/AdminOverviewPage";
-import AnalyticsPage from "./pages/AnalyticsPage";
-import LandingPage from "./pages/LandingPage";
-import CreateStakingPage from "./pages/CreateStakingPage";
-import CreatePerpsPage from "./pages/CreatePerpsPage";
 import { PriceFeedProvider } from "./context/PriceFeedContext";
 import { UIProvider } from "./context/UIContext";
 import { useIsMobile } from "./hooks/useIsMobile";
 import { PageErrorBoundary } from "./components/shared/ErrorBoundary";
 import { useIsAdmin } from "./hooks/useIsAdmin";
+
+const LandingPage        = lazy(() => import("./pages/LandingPage"));
+const SwapPage           = lazy(() => import("./pages/SwapPage"));
+const PoolPage           = lazy(() => import("./pages/PoolPage"));
+const FarmPage           = lazy(() => import("./pages/FarmPage"));
+const LockerPage         = lazy(() => import("./pages/LockerPage"));
+const QuestsPage         = lazy(() => import("./pages/QuestsPage"));
+const QuestDetailPage    = lazy(() => import("./pages/QuestDetailPage"));
+const PerpsPage          = lazy(() => import("./pages/PerpsPage"));
+const StakingPage        = lazy(() => import("./pages/StakingPage"));
+const LeaderboardPage    = lazy(() => import("./pages/LeaderboardPage"));
+const BridgePage         = lazy(() => import("./pages/BridgePage"));
+const ProfilePage        = lazy(() => import("./pages/ProfilePage"));
+const CreateQuestPage    = lazy(() => import("./pages/CreateQuestPage"));
+const AdminQuestsPage    = lazy(() => import("./pages/AdminQuestsPage"));
+const AdminStakingPage   = lazy(() => import("./pages/AdminStakingPage"));
+const AdminPerpsPage     = lazy(() => import("./pages/AdminPerpsPage"));
+const AdminOverviewPage  = lazy(() => import("./pages/AdminOverviewPage"));
+const AnalyticsPage      = lazy(() => import("./pages/AnalyticsPage"));
+const CreateStakingPage  = lazy(() => import("./pages/CreateStakingPage"));
+const CreatePerpsPage    = lazy(() => import("./pages/CreatePerpsPage"));
 
 // ── Admin guard — blocks non-admin wallets ────────────────────────────────────
 
@@ -104,6 +105,7 @@ export default function App() {
     <UIProvider>
     <PriceFeedProvider>
       <ScrollToTop />
+      <Suspense fallback={null}>
       <Routes>
         {/* Standalone landing — no sidebar or navbar */}
         <Route path="/" element={<PageErrorBoundary><LandingPage /></PageErrorBoundary>} />
@@ -135,6 +137,7 @@ export default function App() {
           <Route path="/admin/perps"    element={<PageErrorBoundary><AdminGuard><AdminPerpsPage /></AdminGuard></PageErrorBoundary>} />
         </Route>
       </Routes>
+      </Suspense>
     </PriceFeedProvider>
     </UIProvider>
   );

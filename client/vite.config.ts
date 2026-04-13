@@ -12,6 +12,19 @@ export default defineConfig({
     // Polyfill Buffer for wagmi/ethers deps that reference it in browser context
     global: "globalThis",
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("lightweight-charts"))                               return "vendor-charts";
+          if (id.includes("@lifi/"))                                           return "vendor-lifi";
+          if (id.includes("@privy-io/"))                                       return "vendor-privy";
+          if (id.includes("wagmi") || id.includes("viem") || id.includes("@wagmi/")) return "vendor-wagmi";
+          if (id.includes("node_modules/react") || id.includes("react-router")) return "vendor-react";
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     proxy: {
